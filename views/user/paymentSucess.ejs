@@ -1,0 +1,274 @@
+
+
+<style>
+    * {
+  padding: 0;
+  margin: 0;
+}
+body {
+  overflow: hidden;
+}
+
+.checkmark {
+  width: 56px;
+  height: 56px;
+  position: absolute;
+  left: 48%;
+  top: 18%;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  background-color: #00ffffb3;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  margin: 10% auto;
+  opacity: 0;
+  animation: fille 2s ease-in-out 1s reverse, scale 2s ease-in-out;
+}
+.checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.4s cubic-bezier(0.65, 0, 0.45, 1) 1s forwards;
+}
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fille {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes scale {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.output {
+  opacity: 0;
+  width: 152px;
+  height: 150px;
+  position: absolute;
+  left: 42%;
+  border: 40px solid rgb(0 255 255 / 70%);
+  border-radius: 100%;
+  animation: out 2s cubic-bezier(0.55, 0.09, 0.68, 0.53) 3s forwards;
+  top: 27.5%;
+  transform-origin: center center;
+  transform: scale3d(5.5, -5.5, 5.5);
+  transform-box: view-box;
+  scale: 0;
+  box-shadow: inset 0px 0px 0px 100px rgb(0 255 255 / 70%);
+}
+
+@keyframes out {
+  0% {
+    scale: 0;
+    opacity: 1;
+    box-shadow: inset 0px 0px 0px 100px rgb(0 255 255 / 70%);
+  }
+  100% {
+    scale: 2;
+    opacity: 0;
+    box-shadow: inset 0px 0px 0px 10px rgb(0 255 255 / 70%);
+  }
+}
+
+.inner-div {
+  width: 300px;
+  height: 300px;
+  margin: 30px 0px;
+  border-radius: 10px;
+  animation: 1s linear 0s infinite alternate rise;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+@keyframes rise {
+  from {
+    rotate: -10deg;
+  }
+  to {
+    rotate: 10deg;
+  }
+}
+
+.indiv {
+  opacity: 1;
+  animation: visi 2s linear 5s forwards, shower 5s linear;
+}
+@keyframes visi {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes shower {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.mess-div {
+  height: 50px;
+  border-radius: 10px;
+  margin: 20px;
+  display: flex;
+  flex-direction: row;
+  background: #fff;
+  align-items: center;
+}
+
+.main-div2 {
+  box-shadow: 0px 0px 3px 0px #94959596;
+  margin: 20px;
+  background: #fff;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-div {
+  width: 30px;
+  border-radius: 100%;
+  height: 30px;
+  margin: 10px;
+  background: #00bcd4;
+}
+
+.checkmark-2 {
+  stroke-width: 4;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+}
+
+.text-div {
+  font-size: 18px;
+  font-family: system-ui;
+}
+
+.bill-text {
+  text-align: center;
+}
+.bill-text h1 {
+  font-size: 20px;
+}
+.mobi-ic-div {
+  font-size: 100px;
+  text-align: center;
+  background: #000;
+  border-radius: 10px 10px 0px 0px;
+  height: 150px;
+}
+
+.button {
+  background: #0fcecec7;
+  padding: 10px 30px;
+  border-radius: 5px;
+  color: #fff;
+  margin: 10px 0px;
+}
+
+.indiv {
+  width: 400px;
+  height: 300px;
+  position: absolute;
+  left: 40%;
+  top: 5%;
+  background: #0fcecec7;
+}
+.inner-div-2 {
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  position: absolute;
+  top: 162px;
+}
+.mobi-ic-div-2 {
+  background: #000;
+  height: 150px;
+  border-radius: 10px;
+}
+
+</style>
+
+
+
+
+
+
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>payment animation</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+  <div class="wrapper"> <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+      <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+    </svg>
+    <div class="output">
+    </div>
+  </div>
+  <div class="indiv">
+    <div class="mess-div">
+      <div class="icon-div">
+        <svg class="checkmark-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+          <path class="checkmark__check-2" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+        </svg>
+      </div>
+      <div class="text-div">
+        &#x20B9; 5000 paid successfully
+      </div>
+    </div>
+    <div class="main-div2">
+      <div class="bill-text">
+        <h1> Billbox</h1>
+        <p> All your bill in one box</p>
+      </div>
+      <div class="inner-div-2">
+        <div class="mobi-ic-div-2">
+        </div>
+      </div>
+      <div class="inner-div">
+        <div class="mobi-ic-div">
+          &#128241;
+        </div>
+        <div class="text-div2"></div>
+      </div>
+      <div class="button">
+        DOWNLOAD SIMIPL APP
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

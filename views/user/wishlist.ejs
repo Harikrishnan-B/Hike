@@ -1,0 +1,195 @@
+
+
+
+
+
+
+
+
+
+
+<!-- ...............Trial Wishlist.................. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<%-include('Header')%>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .wishlist-item {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .wishlist-item .product-image {
+            position: relative;
+        }
+
+        .wishlist-item .product-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .wishlist-item .no-items-img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; /* Adjust width as needed */
+        }
+
+        .wishlist-item .no-items-button {
+            margin-top: 20px;
+        }
+
+        .wishlist-item .product-details {
+            flex: 1;
+        }
+
+        .wishlist-item .product-details h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .wishlist-item .product-details p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .wishlist-item .btn-remove {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            align-self: flex-end;
+            cursor: pointer;
+        }
+
+        .wishlist-item .btn-remove:hover {
+            background-color: #c82333;
+            cursor: pointer;
+        }
+
+        @media (min-width: 768px) {
+            .wishlist-item {
+                flex-direction: row;
+            }
+
+            .wishlist-item .product-image {
+                width: 200px;
+                margin-right: 20px;
+            }
+
+            .wishlist-item .product-details {
+                flex: 1;
+            }
+
+            .wishlist-item .btn-remove {
+                align-self: flex-start;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+    
+    <div class="container">
+        <% if (product.length > 0) { %>
+            <% product.forEach(product => { %>
+                <div class="wishlist-item">
+                    <div class="product-image">                      
+                        <img src="<%= product.product_images[0] %>" alt="<%=product.name %>">
+                    </div>
+                    <div class="product-details">
+                        <h3>Name: <%=product.name %></h3>
+                        <br>
+                        <p>Description: <%=product.description %></p>
+                        <br>
+                        <p>Price: ₹<%=product.price%></p>                
+                    </div>
+                    <form id="form-<%= product._id %>" action="/wishdelete/<%= product._id %>" method="get">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="button" class="btn-remove" onclick="confirmRemove('<%= product._id %>')">Remove</button>
+                    </form>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="product-image">
+                <img src=" /images/wishlist.jpg" alt="No items in wishlist" class="no-items-img">
+            </div>
+            <button class="btn btn-success btn-lg btn-block no-items-button" onclick="window.location.href='/home'">Go Back to Home</button>
+        <% } %>
+    </div>    
+       
+    
+<%- include('footer') %>
+</body>
+
+<script>
+    function confirmRemove(productId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this item!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove it!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user confirms, submit the form to remove the item
+                document.getElementById(`form-${productId}`).submit();
+            }
+        });
+    }
+</script>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

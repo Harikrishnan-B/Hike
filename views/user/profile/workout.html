@@ -1,0 +1,448 @@
+
+
+
+const walletSuccess = async (req, res) => {
+    console.log(req.body);
+    const currentDate = new Date();
+    const dataa = req.body;
+    const id = req.session.userid;
+    
+    try {
+        const foundUser = await collectionModel.findOne({ _id: id });
+        const walletBalance = foundUser.walletbalance; // Assuming walletBalance is the property name
+        
+        // Calculate the total amount of the order
+        const orderTotal = foundUser.cart?.grantTotal;
+        
+        // Check if the wallet balance is sufficient
+        if (walletBalance < orderTotal) {
+            return res.status(400).json({ error: 'Insufficient wallet balance.' });
+            alert('Insufficient wallet balance.');
+
+        }
+        
+        foundUser.walletbalance =  orderTotal-foundUser.walletbalance;
+        console.log(foundUser.walletbalance)
+        foundUser.wallethistory.push({
+            process:"purchase",
+            amount: orderTotal
+        })
+
+        // Proceed with order processing
+        const cartItems = foundUser.cart.items;
+        const cartProductIds = cartItems.map(item => item.productname);
+        const cartProducts = await collectionProduct.find({ _id: { $in: cartProductIds }});
+        const userId = foundUser._id;
+        const addressId = dataa.selectedAddress;
+        const method = dataa.method;
+        const amount = orderTotal;
+
+      
+        const productData = cartProducts.map(product => {
+            const cartItem = cartItems.find(item => item.productname.toString() === product._id.toString());
+            
+            return {
+                p_name: product.Productname,
+                realPrice: product.Price,
+                price: amount,
+                description: product.Description,
+                image: product.Image,
+                category: product.Category,
+                quantity: cartItem.quantity
+            };
+        });
+        
+        const deliveryDate = new Date();
+        deliveryDate.setDate(currentDate.getDate() + 5);
+        
+        const newOrder = new collectionOrder({
+            userId: userId,
+            address: req.body.addressid,
+            products: productData,
+            payment: {
+                method: method,
+                amount: amount
+            },
+            status: "Processing",
+            proCartDetail: cartProducts,
+            cartProduct: cartItems,
+            createdAt: currentDate,
+            expectedDelivery: deliveryDate
+        });
+        
+        await newOrder.save();
+        
+        for (let values of cartItems) {
+            for (let products of cartProducts) {
+                if (String(values.productname).trim() === String(products._id).trim()) {
+                    products.Stock -= values.quantity;
+                    await products.save();
+                }
+            }
+        }
+        
+        foundUser.cart.items = [];
+        foundUser.grantTotal = 0;
+        foundUser.total = 0;
+        await foundUser.save();
+        
+        res.status(200).json({ data: "Ordered Successfully" });
+    } catch (error) {
+        console.error('Error processing order:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        .pagination {
+    margin-top: 20px;
+    text-align: center;
+    position: sticky;
+    bottom: 20px; /* Adjust as needed */
+    background-color: white; /* Optional: Add background color */
+    z-index: 1000; /* Ensure it's above other content */
+    padding-left: 601px;
+}
+
+    .pagination a {
+        color: rgb(255, 255, 255);
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        margin: 0 5px;
+        /* margin-left: 650px; */
+        background-color: #000;
+    }
+
+    .pagination a.active {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .pagination a:hover:not(.active) {
+        background-color: #ddd;
+    }
+
+    
+    .stars {
+        display: inline-block;
+        font-size: 25px;
+        cursor: pointer;
+    }
+    .stars:hover {
+        color: orange;
+    }
+    .selected {
+        color: orange;
+    }
+</style>
+
+    
+
+</head>
+<body>
+    <a href="/home" style="position: absolute; top: 20px; left: 20px; text-decoration: none; color: #000;margin-left: 30px;
+    margin-top: 20px;">
+        🔙Home
+        
+    </a>
+   
+    <a href="/home"><img src="/images/Screenshot (58).png" style="height: 95px; width: 175px; margin-top: 15px;margin-left: 700px; border-radius: 50%"; ></a>
+       
+
+
+
+    <div class="container">
+        <h1 style="margin-left: 580px; margin-top: 50px; padding-bottom: 20px;">My Orders</h1>
+        <% orders.forEach(order => { %>
+            <% order.items.forEach(item => { %>
+                <div class="product-box mb-3" style="max-width: 900px; margin: 0 auto; border: 1px solid #ccc; padding: 15px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <div class="product-image" style="padding-right: 40px;">
+                                <img src="<%= item.product.product_images[0] %>" alt="<%= item.product.name %>" class="w-100 rounded-md">
+                            </div>
+                        </div>
+                    <div class="col-md-8">
+                            
+    <div class="product-details">
+    <h5><%= item.product.name %></h5>
+    <p><%= item.product.category %></p>
+    <p>Price: ₹<%= item.product.price.toFixed(2) %></p>
+    <p>Quantity: <%= item.quantity %></p>
+    <% if (order.shippingAddress) { %>
+    <p>Shipping Address: <%= order.shippingAddress.addresstype %> - <%= order.shippingAddress.housename %>, <%= order.shippingAddress.town %>, <%= order.shippingAddress.country %>, <%= order.shippingAddress.state %>, <%= order.shippingAddress.zipcode %></p>
+    <% } %>
+    <p>Status : <%= item.status %></p>
+   
+   
+    <% if (item.status === 'cancelled') { %>     
+        <% } else if (item.status === "Delivered") { %>
+            <button class="btn btn-outline-success cancel-btn" onclick="returnOrder('<%= order._id %>','<%= item.name %>')">Return Product</button> 
+            
+
+
+            <button id="rateProductButton" onclick="showRatingStars()">Rate Product</button>     
+    <% } else { %>                                
+        <!-- Add onclick event to cancel button -->
+        <button type="button" class="btn btn-danger" onclick="cancelOrder('<%= order._id %>', '<%= item._id %>', this,this.parentElement.querySelector('.product-details > p:last-child'))">Cancel</button>
+      
+       <!-- HTML for Rate Product button -->
+<!-- <button id="rateProductButton" onclick="showRatingStars()">Rate Product</button> -->
+
+<div id="ratingStarsContainer" style="display: none;">
+    
+</div>
+    <% } %>
+    </div>
+    </div>
+                    </div>
+                      <!-- Rating -->
+
+                
+                </div>
+            <% }); %>
+        <% }); %>
+
+
+              
+
+
+    </div>
+
+
+    <!-- Pagination -->
+
+    <div class="pagination">
+        <% if (currentPage > 1) { %>
+            <a href="?page=<%= currentPage - 1 %>">&laquo; Previous</a>
+        <% } %>
+      
+        <% let startPage = Math.max(1, currentPage - 2); %>
+        <% let endPage = Math.min(totalPages, startPage + 4); %>
+      
+        <% for(let i = startPage; i <= endPage; i++) { %>
+            <a href="?page=<%= i %>" <%= currentPage === i ? 'class="active"' : '' %>><%= i %></a>
+        <% } %>
+      
+        <% if (currentPage < totalPages) { %>
+            <a href="?page=<%= currentPage + 1 %>">Next &raquo;</a>
+        <% } %>
+    </div>
+
+    <script>
+       function cancelOrder(orderId, itemId, button, statusElement) {
+        fetch('/cancelOrder', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ orderId: orderId, itemId: itemId })
+            })
+        .then(response => {
+            if (response.ok) {
+                statusElement.innerText = 'Status: Cancelled'; // Update status text
+                button.remove(); // Remove the cancel button
+                return response.json();
+            }
+            throw new Error('Failed to cancel order');
+        })
+        .then(data => {
+            console.log('Order cancelled successfully:', data);
+            // Optionally, you can update the UI to reflect the cancelled status
+        })
+        .catch(error => {
+            console.error('Error cancelling order:', error);
+            // Handle error, show error message to the user
+        });
+    }
+
+        
+    </script>
+
+    
+
+
+
+<!-- ............................Return Product (Starting)..................... -->
+<script>
+    function returnOrder(orderId) {
+            console.log(orderId,"hello");
+    
+            Swal.fire({
+                title: 'Enter Reason for Return',
+                input: 'text',
+                inputPlaceholder: 'Enter reason...',
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                cancelButtonText: 'Cancel',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to enter a reason!';
+                    }
+                }
+                }).then((result) => {
+                   if (result.isConfirmed) {
+                        const data = {
+                        orderId: orderId,
+                        // productId: productId,
+                        reason: result.value,// Reason entered by the user
+                    };
+                    fetch(`/returnProduct/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to return product');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Product returned successfully:', data);
+                        Swal.fire('Product Returned!', 'Your product has been returned.', 'success');
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error returning product:', error);
+                        Swal.fire('Error', 'Failed to return product.', 'error');
+                    });
+                }
+            });
+        }
+    </script>
+
+    <!-- ..................................Return Product (Ending)............................. -->
+
+
+
+    <!-- ...................................Product Rating................................... -->
+
+    <script>
+        function rateProduct(productId,event) {
+            const stars = document.querySelectorAll('.stars');
+            const starArray = Array.from(stars);
+            const selectedStarIndex = starArray.indexOf(event.target);
+            for (let i = 0; i <= selectedStarIndex; i++) {
+                starArray[i].classList.add('selected');
+            }
+            for (let i = selectedStarIndex + 1; i < starArray.length; i++) {
+                starArray[i].classList.remove('selected');
+            }
+            const rating = selectedStarIndex + 1;
+        
+            // Send the rating to the backend
+            fetch('/rating', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({productId:productId}),
+            })
+            .then(response => {
+               
+                return response.json();
+            })
+            .then(data => {
+                console.log('Rating submitted successfully:', data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+        </script>
+
+
+<script>
+    // function showRatingStars() {
+    //     var ratingStarsContainer = document.getElementById("ratingStarsContainer");
+    //     if (ratingStarsContainer.style.display === "none") {
+    //         ratingStarsContainer.style.display = "block";
+    //     } else {
+    //         ratingStarsContainer.style.display = "none";
+    //     }
+    // }
+
+    function showRatingStars() {
+    // Show the rating modal
+    var ratingModal = new bootstrap.Modal(document.getElementById('ratingModal'));
+    ratingModal.show();
+  }
+
+
+
+//......................... Submit Rating ..............
+
+</script>
+
+</body>
+</html>
+
+
+
+
+<!-- ..............................Top Seeling Product...................... -->
+
+const getProductPurchaseCounts = async () => {
+    try {
+        const productPurchaseCounts = await Order.aggregate([
+            { $unwind: '$items' },
+            {
+                $group: {
+                    _id: '$items.product',
+                    count: { $sum: '$items.quantity' }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'products', // Adjust based on your actual product collection name
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'productDetails'
+                }
+            },
+            {
+                $unwind: '$productDetails'
+            },
+            {
+                $project: {
+                    _id: 0,
+                    productName: '$productDetails.name',
+                    purchaseCount: '$count'
+                }
+            }
+        ]);
+        
+        console.log(productPurchaseCounts);
+        return productPurchaseCounts;
+    } catch (error) {
+        console.error('Error retrieving product purchase counts:', error);
+        throw error;
+    }
+};

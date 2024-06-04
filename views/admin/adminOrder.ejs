@@ -1,0 +1,398 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-top: 20px;
+      text-align: center; 
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;       
+    }
+
+    th {
+      background-color: #201a1d;
+      color: #fff;
+      width: 800px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+
+    td a {
+      display: inline-block;
+      text-decoration: none;
+      padding: 5px 10px;
+      /* background-color: #007bff; */
+      color: #000000;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    td a:hover {
+      background-color: #0056b3;
+    }
+    .create-button {
+      display: inline-block;
+      text-decoration: none;
+      padding: 10px 20px;
+      background-color: #28a745; /* Green color for the button */
+      color: #fff;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+      margin-right: 10px; /* Add some spacing between the button and the table */
+    }
+
+    .create-button:hover {
+      background-color: #218838; /* Darker green color on hover */
+    }
+    .search-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .search-input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 300px;
+      margin-right: 10px;
+    }
+
+    .search-button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #000000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    } 
+    .search-button:hover {
+      background-color: #0056b3;
+    }
+    #logout{
+      background-color:red;
+    }
+
+    main{
+    display: flex;
+    min-height: 100vh;
+}
+.admintable{
+    flex: 1;
+    padding: 20px;
+}
+tr:not(:last-child) {
+ border-bottom: 1px solid #ccc; /* Adjust the color and thickness as needed */
+}
+
+tr.last-in-group {
+ border-bottom: none;
+}
+/* Adjustments for DataTables pagination */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 0.5em 0.75em;
+  margin-left: 2px;
+  border-radius: 0.25em;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: #f2f2f2;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* Avoid horizontal scrollbar */
+body {
+  overflow-x: hidden;
+}
+
+
+  </style>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.css">
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.css">
+  <!-- DataTable HEADER-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+  
+</head>
+<body>
+
+  <%- include('./partials/bootstrap') %>
+  <link rel="stylesheet" href="/stylesheets/admin/admin_product.css">
+
+
+  <%- include('./partials/header') %>
+  <div style="display: flex;">
+    <div style="flex:1">
+      <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 250px; height: 100%;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+          <!-- <span class="fs-4">Sidebar</span> -->
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="./userlist" class="nav-link text-white " >
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+              Customers
+            </a>
+          </li>
+          <li>
+            <a href="./adminDashboard" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="./adminOrder" class="nav-link text-white active">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+              Orders
+            </a>
+          </li>
+          <li>
+            <a href="./product" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./product.ejs"/></svg>
+              Products
+            </a>
+          </li>
+          <li>
+            <a href="./category" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./category.ejs"/></svg>
+              Category
+            </a>
+          </li>
+          <li>
+            <a href="./coupon" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./coupon.ejs"/></svg>
+              Coupon
+            </a>
+          </li>
+          <a href="./sales" class="nav-link text-white">
+            <svg class="bi pe-none me-2" width="16" height="16"><use href="./salesReport.ejs"/></svg>
+            Report
+          </a>
+        </ul>
+        <hr>
+      </div>
+    </div>
+
+    <!-- Order -->
+ 
+      <div class="container-fluid" style="margin-left: 5px;">
+        <table id="orderTable" class="display" style="width:100%">
+
+      <!-- <table> -->
+        <!-- <table id="example" class="table table-striped" style="width:100%"></table> -->
+        <!-- <table id="example" class="table table-striped" style="width:100%"> -->
+          <!-- <table> -->
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Product Images</th>
+            <th>Product</th>
+            <th>Quantity</th> 
+            <th>Status</th>
+            <th>Shipping Address</th>
+            <th>Payment Method</th>
+            <th>Total Price</th>
+            <th>Created At</th>
+            <th>Return Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% orders.forEach((order, index) => { %>
+            <% order.items.forEach((item, idx) => { %>
+               <tr class="<%= idx === order.items.length - 1 ? 'last-in-group' : '' %>">
+                <% if(idx === 0) { %>
+                  <td rowspan="<%= order.items.length %>"><%= String(order._id).substr(-5); %></td>
+                  <td rowspan="<%= order.items.length %>"><%= order.user %></td>
+                  <td><img src="<%= item.product.product_images[0] %>" style="width: 50px; height: 50px;" ></td>
+                  <td><%= item.product.name %></td>
+                  <td><%= item.quantity %></td>
+                 
+                  <td>
+                    <%if(order.paymentstatus == 'failed' ) { %>
+                        <select name="status">
+                        <option value="Failed" selected>Failed</option>
+                      <% } else if(item.status == 'returned') { %>
+                        <select name="status">
+                        <option value="Returned" selected>Returned</option>
+                      <% } else { %>
+
+                    <select name="status" onchange="changeStatus(this.value, '<%= order._id %>', '<%= item._id %>')">
+                      <option value="pending" <%= item.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                      <option value="shipped" <%= item.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                      <option value="delivered" <%= item.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                      <option value="cancelled" <%= item.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+  
+                    </select>
+
+                    <% } %>
+                  </td>
+                  <td rowspan="<%= order.items.length %>">
+                    <%= order.shippingAddress.housename %>, 
+                    <%= order.shippingAddress.town %>, 
+                    <%= order.shippingAddress.state %>, 
+                    <%= order.shippingAddress.district %>, 
+                    <%= order.shippingAddress.country %>, 
+                    <%= order.shippingAddress.zipcode %>
+                  </td>
+                  <td rowspan="<%= order.items.length %>"><%= order.paymentMethod %></td>
+                  <td rowspan="<%= order.items.length %>"><%= order.TotalPrice %></td>
+                  <td rowspan="<%= order.items.length %>"><%= order.createdAt.toLocaleDateString() %></td>
+                  <td><%= item.returnReason %></td>
+
+                  <%} else { %>
+                  <td><img src="<%= item.product.product_images[0] %>" style="width: 50px; height: 50px;" ></td>
+                  <td><%= item.product.name %></td>
+                  <td><%= item.quantity %></td>
+            
+                  <td>
+
+                    <% if(order.paymentstatus == 'failed' ) { %>
+                      <select name="status">
+                        <option value="Failed" selected>Failed</option>
+
+                         <% } else if(item.status == 'returned') { %>
+                        <select name="status">
+                        <option value="Returned" selected>Returned</option>
+                      <% } else { %>
+
+                    <select name="status" onchange="changeStatus(this.value, '<%= order._id %>', '<%= item._id %>')">
+                      <option value="pending" <%= item.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                      <option value="shipped" <%= item.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                      <option value="delivered" <%= item.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                      <option value="cancelled" <%= item.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                      <option value="returned" <%= item.status === 'returned' ? 'selected' : '' %>>Returned</option>
+                    </select>
+
+                    <% } %>
+                  </td>
+                  <td><%= item.returnReason %></td>
+                <% } %>
+              </tr>
+            <% }) %>
+          <% }) %>
+        </tbody>       
+      <!-- </table> -->
+      
+    </table>
+  </div>
+      
+    
+    </div>
+    </main>
+
+  </body>
+ 
+<script>
+    function cancelform(a){
+        let c=document.querySelector('#cancelform')
+        c.action=`/admin/order/cancel/${a}`
+    }
+</script>
+
+
+
+<!-- Fetch Request -->
+<script>
+  function changeStatus(status, orderId, itemId) {
+    const requestBody = JSON.stringify({
+      orderId: orderId,
+      itemId: itemId,
+      status: status,
+    });
+   console.log(requestBody);
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: requestBody,
+    };
+
+    fetch('/admin/update-order-status', fetchOptions)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to update order status');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Order status updated successfully:', data);
+      })
+      .catch(error => {
+        console.error('Error updating order status:', error.message);
+      });
+  }
+</script>
+
+
+
+<!-- <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script> -->
+<!-- Include jQuery and DataTables JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script>
+  // Initialize DataTable
+  $(document).ready(function() {
+    $('#orderTable').DataTable();
+  });
+</script>
+
+
+
+
+<script src="/javascripts/admin/admin_order.js"></script>
+</body>
+</html>
+

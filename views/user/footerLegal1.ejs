@@ -1,0 +1,121 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Hike Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      font-family: 'Irish Grover', cursive;
+    }
+
+    .header {
+      width: 100%;
+      background-color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container img {
+      height: 85px;
+      width: auto;
+      border-radius: 50%;
+      margin-left: 680px;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 150px; /* Adjust to avoid overlap with the fixed header */
+    }
+
+    .hike-text {
+      font-size: 4rem;
+      font-weight: bold;
+      opacity: 0;
+      animation: fadeIn 2s forwards, moveUp 2s forwards;
+    }
+
+    .lorem-text {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 2s 3s forwards; /* 2s duration with 3s delay */
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes moveUp {
+      to {
+        transform: translateY(-20px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <a href="/home">
+        <img src="/images/Screenshot (58).png" alt="Logo">
+      </a>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h1 class="hike-text">Hike</h1>
+    <p class="lorem-text">Privacy Notice :<br>
+      
+This website respects your privacy. We are committed to protecting the privacy of our users and strive to provide a safe and secure online experience for all visitors. <br>
+
+Information Collection and Use: <br>
+- We do not collect any personally identifiable information unless you voluntarily provide it to us. <br>
+- Any information you provide will only be used for the purpose for which you provided it. <br>
+- We do not share your personal information with third parties without your consent, except as required by law. <br>
+ <br>
+
+ Security: <br>
+- We employ industry-standard security measures to protect your personal information from unauthorized access, misuse, or alteration. <br>
+- However, please be aware that no method of transmission over the internet or electronic storage is 100% secure, and we cannot guarantee absolute security. <br>
+      
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const hikeText = document.querySelector('.hike-text');
+      const loremText = document.querySelector('.lorem-text');
+
+      setTimeout(() => {
+        hikeText.classList.add('visible');
+      }, 1000);
+
+      setTimeout(() => {
+        loremText.classList.add('visible');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

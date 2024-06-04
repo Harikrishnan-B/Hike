@@ -1,0 +1,313 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        min-height: 100vh;
+        background-color: #f4f4f4;
+        overflow-x: hidden;
+      }
+
+      /* Sidebar Navigation */
+      .side-nav {
+        background-color: black;
+        color: white;
+        padding: 15px;
+        text-align: left;
+        width: 200px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .side-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .side-nav a {
+        text-decoration: none;
+        color: #fff;
+        display: block;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 3px;
+        border-radius: 20px;
+        transition: 0.33s ease-in-out;
+        font-weight: 500;
+      }
+
+      .side-nav a:hover {
+        color: black;
+        background-color: white;
+        border-radius: 20px;
+      }
+
+      /* Main Content Area */
+      .content {
+        margin-left: 200px;
+        padding: 20px;
+        padding-top: 30px;
+        display: flex;
+        justify-content: space-between; /* Change to space-between to separate charts */
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .chart-container canvas {
+        max-width: 300px; /* Adjust the maximum width of the graph */
+        max-height: 300px; /* Adjust the maximum height of the graph */
+        width: 100%; /* Ensure the canvas fills its container */
+        height: auto; /* Automatically adjust height based on width */
+      }
+
+      .overview-item {
+        flex-basis: calc(25% - 20px);
+        background-color: #b6c2c0;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .overview-item h3 {
+        margin-top: 0;
+        color: white;
+        text-transform: uppercase;
+      }
+
+      .overview-item p {
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .chart {
+        max-width: 900px;
+        height: 450px;
+        padding: 50px;
+        margin: 0 auto;
+      }
+
+      .chart .chart_types {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .chart .chart_types button {
+        padding: 10px 25px;
+      }
+
+      /* Main Content Area */
+      .content {
+        margin-left: 200px;
+        padding: 20px;
+        padding-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      /* Adjust width of chart containers */
+      .chart-container {
+        width: calc(50% - 20px); /* Set the width to 50% minus margin */
+        margin-bottom: 20px;
+      }
+
+      .chart-container canvas {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .time-filters {
+        display: flex;
+        justify-content: center; /* Center the buttons horizontally */
+        margin-bottom: 20px; /* Add margin to separate the buttons from the charts */
+      }
+
+      .time-filters button {
+        margin: 0 10px; /* Add spacing between buttons */
+      }
+      /* Top Selling Products */
+      .overview-item.top-selling-products {
+        background-color: #b6c2c0;
+        color: black;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        flex-basis: calc(25% - 20px);
+        margin-left: 100px;
+        margin-top: 40px;
+      }
+
+      .overview-item.top-selling-category {
+        background-color: #b6c2c0;
+        color: black;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        flex-basis: calc(25% - 20px);
+        margin-top: 100px;
+        margin-right: 104px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Sidebar Navigation -->
+    <div class="side-nav">
+      <ul>
+        <li><a href="/admin/home">Dashboard</a></li>
+        <li><a href="/admin/user">User</a></li>
+        <li><a href="/admin/category">Category</a></li>
+        <li><a href="/admin/product">Product</a></li>
+        <li><a href="/admin/order">Order</a></li>
+        <li><a href="/admin/coupoun">coupoun</a></li>
+        <li><a href="/admin/banner">Banner</a></li>
+        <li><a href="/admin/sale">Sales</a></li>
+        <li><a href="/admin/logout">Logout</a></li>
+        <!-- Add more navigation items as needed -->
+      </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="content">
+      <!-- Overall Order Amount -->
+      <div class="overview-item overall-order-amount">
+        <h3>Total Number Order</h3>
+        <p><%= orderCount %></p>
+      </div>
+
+      <!-- Overall Discount -->
+      <div class="overview-item overall-discount">
+        <h3>Total Number of Users</h3>
+        <p><%= userCount %></p>
+      </div>
+
+      <!-- Total Product Numbers -->
+      <div class="overview-item total-product-numbers">
+        <h3>Total Product Numbers</h3>
+        <p><%= productCount %></p>
+      </div>
+    </div>
+    <!-- Time Filters -->
+    <div class="time-filters">
+      <button id="dayFilterBtn"   class="btn btn-light"   onclick="filterData('day')">  1 Day  </button>
+      <button id="weekFilterBtn"  class="btn btn-light"   onclick="filterData('week')"> 1 Week </button>
+      <button id="monthFilterBtn" class="btn btn-light"   onclick="filterData('month')">1 Month</button>
+      <button id="yearFilterBtn"  class="btn btn-light"   onclick="filterData('year')"> 1 Year  </button>
+    </div>
+
+    <div class="content">
+      <!-- Chart Containers -->
+      <div class="chart-container">
+        <h2>Line Graph</h2>
+        <canvas id="lineChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h2>Bar Graph</h2>
+        <canvas id="barChart"></canvas>
+      </div>
+
+      <!-- Top Selling Products -->
+      <div class="overview-item top-selling-products">
+        <h3>Top Selling Products</h3>
+        <ul>
+          <% topSellingProducts.forEach(product => { %>
+          <li><%= product._id %></li>
+          <!-- Use _id instead of p_name -->
+          <% }); %>
+        </ul>
+      </div>
+
+      <div class="chart-container">
+        <h2>Top Selling Products</h2>
+        <canvas id="doughnutChart"></canvas>
+      </div>
+
+      <div class="chart-container">
+        <h2>Top Selling Categories</h2>
+        <canvas id="doughnutChartCategories"></canvas>
+      </div>
+
+      <div class="overview-item top-selling-category">
+        <h3>Top Selling Categories</h3>
+        <ul>
+          <% topSellingCategories.forEach(category => { %>
+          <li><%= category._id %></li>
+          <% }); %>
+        </ul>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      let currentFilter = "1 year";
+      let barCtx, lineCtx, doughnutCtx, doughnutCategoryCtx;
+
+ 
+
+      
+const rating = async (req, res) => {
+  console.log('hi iam here');
+  const userId  = req.session.user;
+  const { rating,productId} = req.body;
+  console.log('productId',productId) 
+  try {
+      const product = await Rating.findById(productId).populate('product');
+       
+      if (!product) {
+          return res.status(404).json({ error: 'Product not found' });
+      }
+      console.log('1')
+      // const alreadyRated = product.Ratings.find(rating => rating.postedby.toString() === userId.toString());
+      
+      if (alreadyRated) {
+          // If user already rated, update the existing rating
+          alreadyRated.star = star;
+          await product.save();
+          res.json(product);
+          console.log('3')
+      } else {
+          // If user hasn't rated yet, add a new rating
+          product.ratings.push({ star, postedby: userId });
+          await product.save();
+          res.json(product);
+          console.log('4')
+      }
+  } catch (error) {
+      console.error('Error submitting rating:', error);
+      res.status(500).json({ error: 'Failed to submit rating' });
+  }
+};
+      

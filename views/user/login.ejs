@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Google icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+
+    <!-- start -->
+    
+    <!-- End -->
+
+   
+</head>
+<body>
+    
+    <div class="form-container">
+        <div class="header"><a href="/home"><img src="/images/Screenshot (58).png" alt="" style="height: 100px; width: auto; border-radius: 50%;"></a>
+        </div>
+        <% if(error){%>
+            <p><%= error%></p>
+            <%}%>
+        <p></p>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="name">Email</label>
+                <input type="text" id="email" name="email" placeholder="Enter your name" required autocomplete="off" value="nandu@gmail.com">
+            </div>
+
+         <div style="position: relative;">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="Password" value="007007">
+                <span style="position: absolute; right: 10px; bottom: 5px;" class="toggle-password" onclick="togglePasswordVisibility('password')" >👁️</span>
+            </div>
+            <a href="/forgetPassword" style="position: absolute; right: 10px; top: 60px;">Forget Password?</a>
+
+         </div>
+            <button type="submit" class="submit-btn" style="cursor: pointer;">Login</button>
+            <!-- Sign in with Google option -->
+            <div class="google-signin">
+                <p>Or</p>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+                <a href="/auth/google "> Sign in with Google</a>
+            </div>
+        </form>
+        <div class="centered-text">
+            <p>Don't have an account?<a href="/signup">Signup</a></p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+    <script>
+        function togglePasswordVisibility(fieldId) {
+            var passwordField = document.getElementById(fieldId);
+            var eyeIcon = passwordField.nextElementSibling;
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                eyeIcon.textContent = "👁️";
+                setTimeout(function() {
+                    passwordField.type = "password";
+                    eyeIcon.textContent = "👁️";
+                }, 3000);
+            } else {
+                passwordField.type = "password";
+                eyeIcon.textContent = "🔒";
+            }
+        }
+    </script>
+
+</body>
+</html>

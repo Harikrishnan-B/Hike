@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        /* Adjust button colors */
+        .btn-custom {
+            background-color: #000000;
+            color: #fff;
+        }
+
+        .btn-custom:hover {
+            background-color: #000000;
+            color: #fff;
+        }
+
+        .btn-custom:focus {
+            box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.5);
+        }
+
+        /* Style for sidebar boxes */
+        .sidebar-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Adjust font size and color */
+        .sidebar-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        /* Adjust spacing between buttons */
+        .btn-group {
+            margin-top: 10px;
+        }
+
+        .btn-group .btn {
+            margin-right: 10px;
+        }
+
+        .shop-now {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #ffc107;
+            padding: 5px 10px; /* Add padding */
+            text-align: center; /* Center align text */
+        }
+
+        .shop-now a {
+            text-decoration: none;
+            color: #333; /* Change link color */
+        }
+
+        /* Default color for wishlist icon */
+        .wishlist-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            z-index: 1;
+            color: #000; /* Default color is black */
+            font-size: 24px;
+        }
+
+        /* .wishlist-icon .fa-heart.clicked {
+            color: #bb3535;
+        } */
+
+        .card img {
+            padding-top: 30px;
+        }
+
+        .wishlist-btn {
+            display: block;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .card-price {
+        display: flex;
+        align-items: baseline;
+    }
+    .original-price {
+        margin-right: 10px;
+        font-size: 20px; /* Adjust this size as needed */
+        color: #757575; /* Adjust this color as needed */
+    }
+    .offer-price {
+        font-size: 16px; 
+        color: #000000; 
+    }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="header">
+        <!-- Include header -->
+        <%- include('header2') %>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar for filters -->
+                <div class="col-md-3" style="margin-top: 93px;">
+                    <div class="sidebar-box">
+                        <h5>Search</h5>
+                        <div class="mb-3">
+                            <input type="search" name="search" class="form-control search" id="search" placeholder="Search">
+                        </div>
+                    
+                        <h4 class="sidebar-title">Filter by Price:</h4>
+                        <div class="mb-3">
+                            <label for="priceFrom" class="form-label sidebar-subtitle">From:</label>
+                            <input type="range" name="minPrice" class="form-control" id="priceFrom" value="0" placeholder="Min price">
+                            <span id="priceFromValue">0</span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="priceTo" class="form-label sidebar-subtitle">To:</label>
+                            <input type="range" name="maxPrice" class="form-control" id="priceTo" value="10000" max="10000" placeholder="Max price">
+                            <span id="priceToValue">10000</span>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-custom" id="applyFilters">Apply</button>
+                        <button type="button" class="btn btn-secondary btn-custom" id="resetFilters">Reset</button>
+                    </div>
+                    
+                    <div class="sidebar-box">
+                        <h4 class="sidebar-title">Sort:</h4>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary btn-custom" onclick="sortByName('asc')">A-Z</button>
+                            <button type="button" class="btn btn-primary btn-custom" onclick="sortByName('desc')">Z-A</button>
+                        </div>
+                        <div class="btn-group mt-2">
+                            <button type="button" class="btn btn-primary btn-custom" onclick="sortByPrice('price_asc')">Price Low to High</button>
+                            <button type="button" class="btn btn-primary btn-custom" onclick="sortByPrice('price_desc')">Price High to Low</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main content -->
+                <div class="col-md-9">
+                    <h1 class="m-4" style="margin: 0;padding-top: 5px; font-family: 'Courier New', Courier, monospace; ">Sneakers</h1>
+                    <div class="body-center">
+                        <div class="card-group row" style="width: 100%;">                         
+                            <% products.forEach((product, index) => { %>
+                                <% let imageCounter = index + 1; %>
+                                <div class="col-sm-3" style="margin-bottom: 20px;">
+                                    <div class="card">
+                                        <img src="<%= product.product_images[0] %>" style="max-width: 100%; height: 180px;" class="card-img-top" alt="...">
+                                       
+                                        <div class="card-body">
+                                            <h5 class="card-title"><%= product.name %></h5>
+                                            <h5 class="card-price">
+                                                
+                                                <!-- Use <s> for applying a cross over price  -->
+
+                                            <span class="original-price">₹<%= product.price %></span>
+                                            <span class="offer-price"> </span>
+                                            </h5>
+                                            <div class="shop-now">
+                                            <a href="./description/<%= product._id %>" style="text-decoration: none; color: black;">View Product</a>
+                                            </div>
+                                            <div class="wishlist-btn <%= wishlist && wishlist.some(item => item._id.toString() === product._id.toString()) ? 'clicked' : '' %>" id="wishlist-btn-<%= index %>" data-product-id="<%= product._id %>">
+                                            <%= wishlist && wishlist.some(item => item._id.toString() === product._id.toString()) ? 'Remove from Wishlist' : 'Add to Wishlist' %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <% if (imageCounter % 4 === 0) { %>
+                                    <% if (imageCounter !== products.length) { %>
+                                        </div>                                       
+                                        <div class="card-group row" style="width: 100%;">
+                                    <% } %>
+                                <% } %>
+                            <% }); %>
+                        </div>
+                    </div>
+                    <!-- Add these inside the "Main content" div -->
+                    <div class="pagination-controls">
+                        <input type="hidden" id="currentPage" value="1">
+                        <button class="btn btn-primary btn-custom" onclick="previousPage()">Previous</button>
+                        <button class="btn btn-primary btn-custom" onclick="nextPage()">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <%- include('footer') %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const products = document.querySelectorAll('.col-sm-3');
+            const searchInput = document.getElementById('search');
+            const priceFromInput = document.getElementById('priceFrom');
+            const priceToInput = document.getElementById('priceTo');
+            const applyFiltersBtn = document.getElementById('applyFilters');
+            const resetFiltersBtn = document.getElementById('resetFilters');
+            
+            searchInput.addEventListener('input', filterProducts);
+            applyFiltersBtn.addEventListener('click', filterProducts);
+            resetFiltersBtn.addEventListener('click', resetFilters);
+    
+            priceFromInput.addEventListener('input', updateFromInput);
+            priceToInput.addEventListener('input', updateToInput);
+    
+            function filterProducts() {
+                const searchQuery = searchInput.value.trim().toLowerCase();
+                const minPrice = parseFloat(priceFromInput.value);
+                const maxPrice = parseFloat(priceToInput.value);
+                let anyProductVisible = false; // Flag to check if any product is visible
+
+                products.forEach(product => {
+                    const productName = product.querySelector('.card-title').textContent.trim().toLowerCase();
+                    const price = parseFloat(product.querySelector('.card-price').textContent.replace('₹', '').trim());
+                    const isVisible = productName.includes(searchQuery) && price >= minPrice && price <= maxPrice;
+                    product.style.display = isVisible ? 'block' : 'none';
+                    if (isVisible) {
+                        anyProductVisible = true; // Set the flag to true if any product is visible
+                    }
+                });
+
+                // Check if any product is visible, and show/hide pagination controls accordingly
+                if (anyProductVisible) {
+                    document.querySelector('.pagination-controls').style.display = 'block';
+                } else {
+                    document.querySelector('.pagination-controls').style.display = 'none';
+                }
+
+                // Apply pagination
+                hideAllProducts();
+                showProducts(startIndex, itemsPerPage);
+            }
+    
+            function resetFilters() {
+                priceFromInput.value = 0;
+                priceToInput.value = 10000;
+                searchInput.value = '';
+                filterProducts();
+            }
+    
+            function updateFromInput() {
+                const fromValue = parseFloat(priceFromInput.value);
+                document.getElementById('priceFromValue').textContent = fromValue;
+            }
+    
+            function updateToInput() {
+                const toValue = parseFloat(priceToInput.value);
+                document.getElementById('priceToValue').textContent = toValue;
+            }
+            filterProducts(); 
+        });
+    </script>
+
+    <script>
+        let currentPage = 1;
+        const itemsPerPage = 12; // Adjust based on how many items you want per page
+        let startIndex = 0;
+
+        function filterProducts() {
+            const searchQuery = searchInput.value.trim().toLowerCase();
+            const minPrice = parseFloat(priceFromInput.value);
+            const maxPrice = parseFloat(priceToInput.value);
+            products.forEach(product => {
+                const productName = product.querySelector('.card-title').textContent.trim().toLowerCase();
+                const price = parseFloat(product.querySelector('.card-price').textContent.replace('₹', '').trim());
+                const isVisible = productName.includes(searchQuery) && price >= minPrice && price <= maxPrice;
+                product.style.display = isVisible? 'block' : 'none';
+            });
+
+            // Apply pagination
+            hideAllProducts();
+            showProducts(startIndex, itemsPerPage);
+        }
+
+        function hideAllProducts() {
+            products.forEach(product => {
+                product.style.display = 'none';
+            });
+        }
+
+        function showProducts(startIndex, count) {
+            hideAllProducts();
+            for (let i = startIndex; i < startIndex + count && i < products.length; i++) {
+                products[i].style.display = 'block';
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < Math.ceil(products.length / itemsPerPage)) {
+                currentPage++;
+                startIndex += itemsPerPage;
+                document.getElementById('currentPage').value = currentPage;
+                showProducts(startIndex, itemsPerPage);
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                startIndex -= itemsPerPage;
+                document.getElementById('currentPage').value = currentPage;
+                showProducts(startIndex, itemsPerPage);
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+            wishlistButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default behavior
+                    const productId = button.dataset.productId;
+                    toggleWishlist(productId, button);
+                });
+            });
+        });
+
+        function toggleWishlist(productId, button) {
+            const isWishlisted = button.classList.contains('clicked');
+            if (isWishlisted) {
+                // Remove from wishlist
+                removeProductFromWishlist(productId, button);
+            } else {
+                // Add to wishlist
+                addProductToWishlist(productId, button);
+            }
+        }
+
+        function addProductToWishlist(productId, button) {
+            fetch(`/wishlist/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    button.classList.add('clicked');
+                    // button.textContent = 'Remove from Wishlist';
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'The item has been added to your wishlist!',
+                    });
+                } else {
+                    console.error('Failed to add product to wishlist');
+                }
+            })
+            .catch(error => {
+                console.error('Error adding product to wishlist:', error);
+            });
+        }
+
+        function removeProductFromWishlist(productId, button) {
+            fetch(`/wishlist/${productId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    button.classList.remove('clicked');
+                    button.textContent = 'Add to Wishlist';
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Removed!',
+                        text: 'The item has been removed from your wishlist!',
+                    });
+                } else {
+                    console.error('Failed to remove product from wishlist');
+                }
+            })
+            .catch(error => {
+                console.error('Error removing product from wishlist:', error);
+            });
+        }
+    </script>
+</body>
+</html>

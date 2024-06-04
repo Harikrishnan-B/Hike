@@ -1,0 +1,662 @@
+
+<div class="container">
+    <!-- <img src="/images/cover.png" "> -->
+    <a href="/home"><img src="/images/Screenshot (58).png" style="height: 90px; width: 140px; border-radius: 50% ; margin-left: 650px;" ></a>
+    <!-- <h1>hike</h1> -->
+  </div>
+    
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">    
+    <div class="bg-gray-50 pl-13  pt-8">
+      <h2 class="text-5xl font-small text-gray pl-5">Checkout</h2>
+  
+      <div class="max-w-2xl mx-auto pt-8 pb-15 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+    
+        <form id="ord" class="lg:grid  lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+          <div>
+           
+            <div class=" border-t border-gray-200 ">
+              <h2 class="text-lg font-medium text-gray-900">Shipping information</h2>
+               
+                <!-- Add a checkbox for selecting existing address -->
+      <div class="mt-4 flex items-center">
+          <input type="checkbox" id="use-existing-address" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
+          <label for="use-existing-address" class="ml-2 block text-sm text-gray-700">Use existing address</label>
+      </div>
+  
+      <!-- Existing address dropdown (hidden by default) -->
+      <div id="existing-address-dropdown" class="mt-4 hidden">
+          <label for="existing-address" class="block text-sm font-medium text-gray-700">Select existing address</label>
+          <div class="mt-1">
+              <!-- Replace this with your logic to fetch and display user's existing addresses -->
+              <select id="existing-address" name="existing-address" class="block h-8 w-full border-gray-500 md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border">
+                <option value="1"> Select the address</option>
+              <% address.forEach(address => { %>               
+                  <option value="<%= address._id %>"><%= address.addresstype %> : <%= address.housename %>, <%= address.town %>, <%= address.town %>, <%= address.country %>, <%= address.state%>,<%= address.zipcode %> </option>        
+              <% }); %>
+  
+            </select>
+          </div>
+      </div>
+  
+  
+      <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+        <div>
+          <label for="houseName" class="block text-sm font-medium text-gray-700"> Name</label>
+          <div class="mt-1">
+              <input type="text" id="name" name="name" autocomplete="given-name" class="block h-8 w-full border-gray-500 md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border addressName">
+          </div>
+      </div>
+          <div>
+              <label for="houseName" class="block text-sm font-medium text-gray-700">House name</label>
+              <div class="mt-1">
+                  <input type="text" id="housename" name="housename" autocomplete="given-name" class="block h-8 w-full border-gray-500 md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border addressName">
+              </div>
+          </div>
+    
+                <div>
+                  <label for="street" class="block text-sm font-medium text-gray-700">Town</label>
+                  <div class="mt-1">
+                    <input type="text" id="town" name="town" autocomplete="family-name" class="block h-8 w-full border-gray-500 md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border addressName">
+                  </div>
+                </div>
+    
+                <div class="sm:col-span-2">
+                  <label for="addresstype" class="block text-sm font-medium text-gray-700">Address Type</label>
+                  <div class="mt-1">
+                    <select id="addresstype" name="addresstype" autocomplete="country-name" class="block h-8 w-full border-gray-500 md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border ">
+                      <option>Home</option>
+                      <option>Work</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+    
+              
+              <div>
+                  <label for="state" class="block text-sm font-medium text-gray-700">District</label>
+                  <div class="mt-1">
+                      <input type="text" name="district" id="district" autocomplete="address-level1" class="block h-8 w-full border-gray-500 md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border addressName">
+                  </div> 
+              </div> 
+              <div>
+                <label for="city" class="block text-sm font-medium text-gray-700">State</label>
+                <div class="mt-1">
+                    <input type="text" name="state" id="state" autocomplete="address-level2" class="block h-8 w-full border-gray-500 md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border addressName">
+                </div>
+            </div> 
+              <div>
+                <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                <div class="mt-1">
+                    <input id="country" type="text"  name="country" autocomplete="country-name" class="block h-8 w-full border-gray-500 md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border addressName">
+                            
+                </div>
+            </div>           
+              <div>
+                  <label for="zipCode" class="block text-sm font-medium text-gray-700">Zipcode</label>
+                  <div class="mt-1">
+                      <input type="text" name="zipcode" id="zipcode" autocomplete="postal-code" class="block h-8 w-full border-gray-500 md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border addressName">
+                  </div>
+              </div>
+              
+          </div>
+      </div>            
+            <!-- Payment -->
+            
+          </div>
+  
+          <!-- Starting -->
+          <div class="mt-10 lg:mt-0">
+            <h2 class="text-lg font-medium text-gray-900">Order summary</h2>
+            <div class="mt-4 bg-white border border-gray-300 rounded-lg shadow-sm">
+              <h3 class="sr-only">Items in your cart</h3>
+              <ul role="list" class="divide-y divide-gray-200">
+              <% user.cart.items.forEach((product,index) => { %>
+                <li class="flex py-6 px-4 sm:px-6">
+                  <div class="flex-shrink-0">
+                    <img src="<%= product.product.product_images[0] %>" alt="<%= product.product.name %>" class="w-20 rounded-md">
+                  </div>
+  
+                  <div class="ml-6 flex-1 flex flex-col">
+                    <div class="flex">
+                      <div class="min-w-0 flex-1">
+                        <h4 class="text-sm">
+                          <a href="#" class="font-medium text-gray-700 hover:text-gray-800">
+                              <%= product.product.name %>
+                          </a>
+                        </h4>
+                        <p class="mt-1 text-sm text-gray-500">
+                          <%= product.product.category %>
+                        </p>
+                        
+                      </div>
+    
+                    </div>
+    
+                    <div class="flex-1 pt-2 flex items-end justify-between">
+                      <p class="mt-1 text-sm font-medium text-gray-900">₹<%= product.product.price.toFixed(2) %></p>
+    
+                      <div class="ml-4">
+                        <label for="quantity" class="sr-only">Quantity</label>
+                        <%= product.quantity %>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <% }); %>
+                <!-- More products... -->
+              </ul>
+              <dl class="border-t border-gray-300 py-6 px-4 space-y-6 sm:px-6">
+                <div class="flex items-center justify-between">
+                  <dt class="text-sm">
+                    Subtotal
+                  </dt>
+                  <dd class="text-sm font-medium text-gray-900">
+                    
+                  </dd>
+                </div>
+                  
+                <div class="flex items-center justify-between">
+                  <dt class="text-sm">
+                    Shipping
+                  </dt>
+                  <dd class="text-sm font-medium text-gray-900">
+                    Free
+                  </dd>
+                </div>
+               
+                <div class="flex items-center justify-between border-t border-gray-300 pt-6">
+                  <dt class="text-base font-medium">
+                    Total
+                  </dt>
+                  <dd class="text-base font-medium text-gray-900" id="totalprice" >
+                      ₹<%= user.cart.TotalPrice%>.00
+                  </dd>
+                  
+                </div>
+              </dl>
+    <dl class="border-t border-gray-300 py-6 px-4 space-y-6 sm:px-6">
+        
+              <h2 class="text-lg font-medium text-gray-900">Payment</h2>
+    
+              <fieldset class="mt-4">
+                <legend class="sr-only">Payment type</legend>
+                <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                  <div class="flex items-center" id="codContainer">
+                    <input id="cod" name="payment-type" value="cod" type="radio" checked="" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                    <label for="cod" class="ml-3 block text-sm font-medium text-gray-700">
+                      Cash On Delivery
+                    </label>
+                  </div>                                   
+                </div>
+                <div class="flex items-center">
+                  <input id="razorpay" name="payment-type" value="razorpay" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                  <label for="razorpay" class="ml-3 block text-sm font-medium text-gray-700">
+                    Razorpay
+                  </label>
+                </div>
+                <div class="flex items-center">
+                  <input id="wallet" name="payment-type" value="wallet" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                  <label for="wallet" class="ml-3 block text-sm font-medium text-gray-700">
+                    Wallet
+                  </label>
+                </div>
+              
+              </div>
+              <div id="errorMessageContainer"></div>
+              <div id="nocod" style="color: rgb(157, 21, 21); margin-top: 15px;"></div>
+              </fieldset>
+
+              <div style="margin-bottom: 20px;"> <!-- Adjust margin as needed -->
+                <!-- Coupon dropdown -->
+                <% if(user.cart.discount == 0) {%>
+                <div class="dropdown">
+                  <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="couponDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                      Select Coupon
+                  </button> -->
+                  <div style="margin-bottom: 20px;">
+                      <select class="form-control" id="couponSelect" onchange="applyCoupon(this)">
+                          <option value="">Select Coupon</option>
+                          <% coupons.forEach(coupon => { %>
+                          <option value="<%=coupon._id%>" data-coupon-value="<%=coupon.couponValue%>"><%= coupon.couponName %></option>
+                          <% }); %>
+                      </select>
+                  </div>
+              </div>
+              <% } else { %>
+              <div id="selectedCoupon" >
+                  <label for="selectedCouponField">Coupon Discount Amount :</label>
+                  <input type="text" id="selectedCouponField" class="form-control" value=" Rs. <%= user.cart.discount %>" readonly>
+                  <!-- Button to remove selected coupon -->
+                  <button onclick="removeCoupon()">Remove Coupon</button>
+              </div>
+              <% } %>
+              </dl>    
+              <!-- <div id="error-message" class="text-red-500 mt-4"></div> -->
+
+              <div class="border-t border-gray-300 py-6 px-4 sm:px-6">
+
+      <button type="button" onclick="confirmOrder()"  class="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">Confirm order</button>
+      </div>
+            </div>
+          </div>
+              <!-- End -->
+
+           
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  
+
+
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+
+    let total = '<%= user.cart.TotalPrice%>'
+    if(parseInt(total)>1000){
+
+      document.getElementById('codContainer').style.display = 'none';
+
+// Show a message indicating COD is not available for orders above 1000
+const message = document.createElement('p');
+// message.textContent = "Cash On Delivery is not available for orders above 1000.";
+document.body.appendChild(message);
+
+      document.getElementById('codContainer').style.display = 'none';
+    }
+  </script>
+   
+    
+    <script>
+        function HandleExixtingAddess(){
+            let handle= document.getElementById('use-existing-address');
+            handle.addEventListener('change', (e)=>{
+                e.stopPropagation()
+            if(e.target.checked){
+                document.getElementById('existing-address-dropdown').style.display="block";
+            }else{
+                document.getElementById('existing-address-dropdown').style.display="none";
+                let addressInput = document.querySelectorAll('.addressName');
+                addressInput.forEach((element,i) => {
+                 element.value=''
+                });
+            }
+            })
+        }
+        HandleExixtingAddess()
+
+
+
+        function HandleSelect(){
+            let select =document.getElementById('existing-address');
+            select.addEventListener('change',(e)=>{
+                e.stopPropagation();
+                let value = e.value;
+                if(value!=1){
+                    let data=e.target.innerText.split(':')[1].split(',');
+                    let type=e.target.innerText;
+                    console.log(type);
+                    let addressInput = document.querySelectorAll('.addressName');
+                    addressInput.forEach((element,i) => {
+                    element.value=data[i]
+                    });
+                }
+            })       
+        }
+        HandleSelect()
+
+
+
+  </script>
+
+
+
+  <script>
+
+  let walletamnt = '<%= user.walletbalance%>'
+  let totalprice = '<%= user.cart.TotalPrice %>'
+
+
+  function confirmOrder() {
+  const selectElement = document.getElementById('existing-address');
+  const useExistingAddressCheckbox = document.getElementById('use-existing-address');
+  const selectedValue = selectElement.value;  
+  console.log('Selected value:', selectedValue);
+  const PaymentMethod = document.querySelector('input[name="payment-type"]:checked').value;
+ 
+
+
+  if (useExistingAddressCheckbox.checked) {
+        order(PaymentMethod, selectedValue);
+        // showSuccessPopup();
+
+    } else {
+    const addressData = {
+            name:document.getElementById('name').value,
+            housename: document.getElementById('housename').value,
+            town: document.getElementById('town').value,
+            district: document.getElementById('district').value,
+            state: document.getElementById('state').value,
+            country: document.getElementById('country').value,
+            addresstype: document.getElementById('addresstype').value,
+            zipcode: document.getElementById('zipcode').value
+        };
+
+        fetch('/addressadd', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(addressData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            const selectedValue = data.newid;
+            console.log('New Address ID:', selectedValue);
+            order(PaymentMethod, selectedValue);           
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });    }
+
+}
+
+
+// function confirmOrder() {
+//     const selectElement = document.getElementById('existing-address');
+//     const useExistingAddressCheckbox = document.getElementById('use-existing-address');
+//     const selectedValue = selectElement.value;
+//     const PaymentMethod = document.querySelector('input[name="payment-type"]:checked').value;
+//     const errorMessageElement = document.getElementById('error-message');
+
+//     errorMessageElement.textContent = ''; // Clear previous error messages
+
+//     if (!useExistingAddressCheckbox.checked) {
+//         const name = document.getElementById('name').value.trim();
+//         const housename = document.getElementById('housename').value.trim();
+//         const town = document.getElementById('town').value.trim();
+//         const district = document.getElementById('district').value.trim();
+//         const state = document.getElementById('state').value.trim();
+//         const country = document.getElementById('country').value.trim();
+//         const zipcode = document.getElementById('zipcode').value.trim();
+
+//         if (!name || !housename || !town || !district || !state || !country || !zipcode) {
+//             errorMessageElement.textContent = 'Please fill out all the address fields.';
+//             return; // Stop further execution
+//         }
+//     }
+
+//     if (useExistingAddressCheckbox.checked) {
+//         order(PaymentMethod, selectedValue);
+//     } else {
+//         const addressData = {
+//             name: document.getElementById('name').value,
+//             housename: document.getElementById('housename').value,
+//             town: document.getElementById('town').value,
+//             district: document.getElementById('district').value,
+//             state: document.getElementById('state').value,
+//             country: document.getElementById('country').value,
+//             addresstype: document.getElementById('addresstype').value,
+//             zipcode: document.getElementById('zipcode').value
+//         };
+
+//         fetch('/addressadd', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify(addressData),
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             const selectedValue = data.newid;
+//             order(PaymentMethod, selectedValue);
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+//     }
+// }
+
+
+
+
+
+function order(PaymentMethod,selectedValue){
+  const orderData = {  
+    shippingAddress: selectedValue,
+    paymentMethod: PaymentMethod,
+  };
+
+  if(PaymentMethod==='cod'){
+    fetch('/createorder', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(orderData)
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    
+    throw new Error('Failed to create order');
+  }})
+  .then(data => {
+    if(data.nostock){
+      return Swal.fire({
+        icon: 'error',
+        title: 'No Stock Available',
+        text: 'Please Check Other Products',
+    });
+    }
+    console.log('Order created successfully:', data);
+    window.location.href = "/confirmOrder";
+  })
+  .catch(error => {
+    console.error('Error creating order:', error);
+  });
+  } else if(PaymentMethod ==='razorpay'){
+
+    initializeRazorpay(orderData);
+
+  } else if (PaymentMethod ==='wallet'){
+    // if(  parseInt(totalprice) > parseInt(walletamnt)){
+    //    return alert('Insufficient Balannce')
+    // }
+    if (parseInt(totalprice) > parseInt(walletamnt)) {
+    return Swal.fire({
+        icon: 'error',
+        title: 'Insufficient Balance',
+        text: 'Your wallet does not have enough funds for this payment.',
+    });
+}
+
+
+     
+
+    fetch('/createorder', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(orderData)
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    
+    throw new Error('Failed to create order');
+  }})
+  .then(data => {
+    console.log('Order created successfully:', data);
+    window.location.href = "/confirmOrder";
+  })
+  .catch(error => {
+    console.error('Error creating order:', error);
+  });
+  }
+}
+
+
+function initializeRazorpay(orderData) {
+  const totalPriceElement = document.getElementById('totalprice');
+  const totalPriceText = totalPriceElement.textContent.trim(); 
+  const totalPrice = parseFloat(totalPriceText.replace('₹', '').trim()); 
+  const PaymentMethod = document.querySelector('input[name="payment-type"]:checked').value;
+  const selectElement = document.getElementById('existing-address');
+  const selectedValue = selectElement.value;  
+
+  if (isNaN(totalPrice)) {
+    console.error('Invalid total price:', totalPrice);
+    return; // Exit function if totalPrice is NaN
+  }
+  const totalprice = Math.round(totalPrice * 100); 
+
+  fetch('/createorderraz', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ amount: totalprice}), 
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      const options = {
+        key: 'rzp_test_VdW2JzKd1CGF4j', 
+        amount: data.amount,
+        currency: 'INR',
+        name: 'Hike',
+        description: 'Test Transaction',
+        image: 'https://example.com/your_logo',
+        order_id: data.orderId,
+        handler: function (response) {
+          console.log('Payment successful! Payment ID:', response.razorpay_payment_id);
+          fetch('/createorder', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData),
+          })
+            .then(response => response.json())
+            .then(data => {
+              if(data.nostock){
+      return Swal.fire({
+        icon: 'error',
+        title: 'No Stock Available',
+        text: 'Please Check Other Products',
+    });
+    }
+              console.log('Order created successfully:', data);
+              window.location.href = "/confirmOrder";
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        },
+        prefill: {
+          name: 'Hari',
+          email: 'hari@payexample.com',
+          contact: '0070070070',
+        },
+        notes: {
+          address: 'Razorpay Corporate Office',
+        },
+        theme: {
+          color: '#3399cc',
+        },
+      };
+
+      const rzp = new Razorpay(options);    
+      rzp.open();     
+
+      rzp.on('payment.failed', function (response) {
+        console.error('Payment failed with error:', response);
+        fetch('/createorder', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ ...orderData, Paymentstatus: 'failed' }),
+            })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Success:', data);
+                 rzp.close();
+                window.location.href = '/orderPage'
+                
+
+                // handlePaymentFailure(response);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+       
+      });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+</script>
+
+
+
+<!-- ......................Fetch for Coupon  (Starting)..................... -->
+
+<script>
+
+
+ function applyCoupon(select) {
+        var selectedOption = select.options[select.selectedIndex];
+        var selectedCouponField = document.getElementById("selectedCouponField");
+        var selectedCouponDiv = document.getElementById("selectedCoupon");
+        
+ 
+        var couponId = selectedOption.value;
+        var couponValue = parseFloat(selectedOption.getAttribute('data-coupon-value'));
+        var totalPrice = parseFloat('<%=user.cart.TotalPrice%>');
+        
+        couponVal(couponId, couponValue, totalPrice);
+    }
+
+    function removeCoupon() {
+      fetch('/couponRemove',{
+        method:'GET',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify()
+      })
+      .then(response=>response.json())
+      .then(data=>{
+        console.log('updated');
+      })
+
+    }
+
+    function couponVal(id, value, total) {
+        fetch(`/coupon/${id}`)
+        .then(response => response.json())
+        .then(data => {
+          window.location.reload()
+        })
+        .catch(error => console.error("Error fetching coupons:", error));
+    }
+
+</script>
+// <!-- ............................Fetch for Coupon (Ending)..................... -->
+
+
+
+
+
+

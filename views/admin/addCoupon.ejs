@@ -1,0 +1,385 @@
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-top: 20px;
+      text-align: center; 
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;       
+    }
+
+    th {
+      background-color: #201a1d;
+      color: #fff;
+      width: 800px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+
+    td a {
+      display: inline-block;
+      text-decoration: none;
+      padding: 5px 10px;
+      /* background-color: #007bff; */
+      color: #000000;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    td a:hover {
+      background-color: #0056b3;
+    }
+
+    .create-button {
+      display: inline-block;
+      text-decoration: none;
+      padding: 10px 20px;
+      background-color: #28a745; /* Green color for the button */
+      color: #fff;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+      margin-right: 10px; /* Add some spacing between the button and the table */
+    }
+
+    .create-button:hover {
+      background-color: #218838; /* Darker green color on hover */
+    }
+    .search-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .search-input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 300px;
+      margin-right: 10px;
+    }
+
+    .search-button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #000000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    
+    .search-button:hover {
+      background-color: #0056b3;
+    }
+    #logout{
+      background-color:red;
+    }
+
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Top Navigation */
+    h1 {
+      background-color: #ffffff;
+      color: #fff;
+      padding: 20px;
+      margin: 0;
+    }
+
+    /* Form Container */
+    .form-container {
+      max-width: 500px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form Label */
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    /* Form Input */
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    /* Error Message */
+    .error {
+      color: red;
+      margin-top: 5px;
+    }
+
+    /* Submit Button */
+    .submit-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .submit-button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('./partials/bootstrap.ejs') %>
+  <link rel="stylesheet" href="/stylesheets/admin/admin_product.css">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+  <%- include('./partials/header.ejs') %>
+  <div style="display: flex;">
+    <div style="flex:1">
+      <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 250px; height: 648px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+          <!-- <span class="fs-4">Sidebar</span> -->
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="./userlist" class="nav-link text-white " >
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+              Customers
+            </a>
+          </li>
+          <li>
+            <a href="./adminDashboard" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="./adminOrder" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+              Orders
+            </a>
+          </li>
+          <li>
+            <a href="./product" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./product.ejs"/></svg>
+              Products
+            </a>
+          </li>
+          <li>
+            <a href="./category" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./category.ejs"/></svg>
+              Category
+            </a>
+          </li>
+          <li>
+            <a href="./coupon" class="nav-link text-white active">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./coupon.ejs"/></svg>
+              Coupon
+            </a>
+          </li>
+          <a href="./sales" class="nav-link text-white">
+            <svg class="bi pe-none me-2" width="16" height="16"><use href="./salesReport.ejs"/></svg>
+            Report
+          </a>
+        </ul>
+        <hr>
+      </div>
+    </div>
+
+
+  
+<div class="container-fluid " style="margin-left: 5px;">
+
+  <div class="content">
+    <!-- Top Navigation -->
+    
+
+    <!-- Add New Coupon Form -->
+    <div class="form-container">
+      <h1><u>Create New Coupon</u></h1>
+    
+      <form id="couponForm">
+        <label for="couponCode">Coupon Code:</label>
+        <input type="text" id="couponCode" name="couponCode">
+        <div id="couponCodeError" class="error"></div>
+    
+        <label for="discountType">Discount (%):</label>
+        <input type="text" id="discountType" name="discountType">
+        <div id="discountTypeError" class="error"></div>
+    
+        <label for="discountAmount">Usage Limit:</label>
+        <input type="text" id="discountAmount" name="discountAmount">
+        <div id="discountAmountError" class="error"></div>
+    
+        <label for="expiryDate">Expiry Date:</label>
+        <input type="date" id="expiryDate" name="expiryDate">
+        <div id="expiryDateError" class="error"></div>
+    
+        <button class="submit-button" type="button" onclick="validateAndAddCoupon()">Add Coupon</button>
+      </form>
+    </div>
+</body>
+</html>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    function validateAndAddCoupon() {
+        if (validateForm()) {
+            addCoupon();
+        }
+    }
+
+    function validateForm() {
+        clearErrors(); // Clear previous errors
+
+        const couponCode = document.getElementById('couponCode');
+        const discountType = document.getElementById('discountType');
+        const discountAmount = document.getElementById('discountAmount');
+        const expiryDate = document.getElementById('expiryDate');
+
+        // Regular expressions for validation
+        const codeRegex = /^[a-zA-Z0-9]+$/;
+        const amountRegex = /^\d+(\.\d{1,2})?$/;
+
+        let isValid = true;
+
+        // Validate Coupon Code
+        if (!couponCode.value.match(codeRegex)) {
+            showError('couponCodeError', 'Coupon code can only contain letters and numbers.');
+            isValid = false;
+        }
+  // Validate Discount Type
+  if (!discountType.value.match(amountRegex)) {
+        showError('discountTypeError', 'Please enter a positive number for discount amount....');
+        isValid = false;
+    } else if (parseFloat(discountType.value) < 0) {
+        alert('Please enter a positive number for discount amount.');
+        isValid = false;
+    }
+
+    // Validate Discount Amount
+    if (!discountAmount.value.match(amountRegex)) {
+        showError('discountAmountError', 'Please enter a positive number for usage limit....');
+        isValid = false;
+    } else if (parseFloat(discountAmount.value) < 0) {
+        alert('Please enter a positive number for usage limit.');
+        isValid = false;
+    }
+
+        // Validate Expiry Date
+        if (expiryDate.value === '') {
+            showError('expiryDateError', 'Expiry date is required.');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    // Function to show error message
+    function showError(id, message) {
+        const errorDiv = document.getElementById(id);
+        errorDiv.textContent = message;
+    }
+
+    // Function to clear all error messages
+    function clearErrors() {
+        const errors = document.querySelectorAll('.error');
+        errors.forEach(error => {
+            error.textContent = '';
+        });
+    }
+
+    async function addCoupon(){
+        const form = document.getElementById('couponForm');
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+        console.log('Coupon data:', data);
+        try {
+            const response = await fetch('/admin/addcoupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const responseData = await response.json();
+            if (!response.ok) {
+                console.log("inside not ok")
+                // Handle non-ok response
+                throw new Error('Failed to add coupon: ' + response.statusText);
+            }
+
+            console.log('Coupon added successfully:', responseData);
+            window.location.href = "/admin/coupon";
+            // Optionally redirect or perform additional actions after successful coupon addition
+        } catch (error) {
+            console.error('Error adding coupon:', error.message);
+            // Handle error, display message to user, etc.
+        }
+    }
+</script>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+            position: sticky;
+            bottom: 20px; /* Adjust as needed */
+            background-color: white; /* Optional: Add background color */
+            z-index: 1000; /* Ensure it's above other content */
+            padding-left: 601px;
+        }
+
+        .pagination a {
+            color: rgb(255, 255, 255);
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            margin: 0 5px;
+            background-color: #000;
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+
+        #rating-container {
+            margin-top: 20px;
+        }
+
+        .rating-box {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ccc;
+            margin-right: 5px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+
+        .rating-box.active {
+            background-color: #ffcc00;
+        }
+
+        /* Added styles for product details table */
+        .product-details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .product-details-table th,
+        .product-details-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .product-details-table th {
+            background-color: #f2f2f2;
+        }
+
+        .product-details-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .product-details-table tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        .status-success, .status-failed {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .status-success {
+            background-color: #28a745;
+        }
+
+        .status-failed {
+            background-color: #dc3545;
+        }
+
+        .no-pointer {
+            cursor: default;
+        }
+
+        .my-orders-header {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            padding-bottom: 80px;
+        }
+
+        .my-orders-header img {
+            height: 100px;
+            width: 100px;
+            margin-right: 20px;
+        }
+
+        .my-orders-header h1 {
+            margin: 0;
+        }
+    </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</head>
+<body>
+    <a href="/home" style="position: absolute; top: 20px; left: 20px; text-decoration: none; color: #000; margin-left: 30px; margin-top: 20px;">
+        🔙 Home
+    </a>
+   
+    <a href="/home">
+        <img src="/images/Screenshot (58).png" style="height: 85px; width: 142px; margin-top: 15px; margin-left: 700px; border-radius: 50%;" >
+    </a>
+    
+    <div class="container">
+        <div class="my-orders-header">
+            <img src="/images/my-orders-icon 2.webp" alt="My Orders Icon">
+            <h1> Orders 🢂</h1>
+        </div>
+        <!-- Table to display orders -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Total Amount</th>
+                    <th>Payment Status</th>
+                    <th>View Order</th>
+                    <!-- <th>Payment Status</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach(order => { %>
+                    <tr>
+                        <td><%= order._id %></td>
+                        <td>₹<%= order.TotalPrice %></td>
+                        <% if(order.paymentstatus == 'confirmed') {  %>
+                            <td class="no-pointer"><div class="status-success">Success</div></td>
+                        <% } else { %>
+                            <td class="no-pointer"><div class="status-failed">Failed</div></td>
+                        <% } %>
+                        <td>
+                            <% if(order.paymentstatus == 'confirmed') {  %>
+                            <button type="button" class="btn btn-primary" onclick="viewOrder('<%= order._id %>')">View</button>
+                            <% } else { %>
+                            <button type="button" class="btn btn-danger" onclick="retry('<%= order._id %>' , '<%= order.TotalPrice %>')">Retry</button>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <% if (currentPage > 1) { %>
+            <a href="?page=<%= currentPage - 1 %>">&laquo; Previous</a>
+        <% } %>
+        <% let startPage = Math.max(1, currentPage - 2); %>
+        <% let endPage = Math.min(totalPages, startPage + 4); %>     
+        <% for(let i = startPage; i <= endPage; i++) { %>
+            <a href="?page=<%= i %>" <%= currentPage === i ? 'class="active"' : '' %>><%= i %></a>
+        <% } %>
+        <% if (currentPage < totalPages) { %>
+            <a href="?page=<%= currentPage + 1 %>">Next &raquo;</a>
+        <% } %>
+    </div>
+
+
+    <script>
+        function viewOrder(orderId) {
+            window.location.href = `/orderDetails/${orderId}`;
+        }
+
+        function retry(orderId, totalprice) {
+            fetch('/createorderraz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ amount: totalprice * 100 }), 
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const options = {
+                    key: 'rzp_test_VdW2JzKd1CGF4j',
+                    amount: data.amount,
+                    currency: 'INR',
+                    name: 'Hike',
+                    description: 'Test Transaction',
+                    image: 'https://example.com/your_logo',
+                    order_id: data.orderId,
+                    handler: function (response) {
+                        console.log('Payment successful! Payment ID:', response.razorpay_payment_id);
+                        fetch('/failedpay', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ orderId: orderId }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Order created successfully:', data);
+                            window.location.href = "/confirmOrder";
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    },
+                    prefill: {
+                        name: 'Hari',
+                        email: 'hari@payexample.com',
+                        contact: '0070070070',
+                    },
+                    notes: {
+                        address: 'Razorpay Corporate Office',
+                    },
+                    theme: {
+                        color: '#3399cc',
+                    },
+                };
+
+                const rzp = new Razorpay(options);    
+                rzp.open();     
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
+</body>
+</html>

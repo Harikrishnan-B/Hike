@@ -1,0 +1,512 @@
+
+
+<%-include('Header')%>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+
+
+    .product-details {
+        display: flex;
+        justify-content: space-around;
+        margin: 50px 200px 100px;
+    }
+
+    .product-images {
+        flex: 1;
+        max-width: 400px;
+        position: relative;
+    }
+
+
+    .main-image {
+    width: 400px;
+    height: 400px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* Add a transition for opacity */
+    /* Other styles */
+}
+
+
+    .small-images {
+        display: flex;
+        gap: 10px;
+        flex-direction: column; /* Change to column to align small images vertically */
+        position: absolute; /* Position small images absolutely within the product-images container */
+        top: 0;
+        left: -70px; /* Adjust the left position to move small images to the left of the main image */
+    }
+    
+
+    .small-image {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ddd; /* Add a border for the normal state */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s; /* Add a transition for a smooth effect */
+}
+
+.small-image:hover {
+    border: 3px solid;
+    border-color: #8d8c8c; /* Change the border color for the hover state */
+}
+
+    .product-info {
+        flex: 1;
+        margin-left: 70px;
+        border: #000;
+    }
+
+    .product-info h2 {
+        margin-top: 0;
+        color: #000;
+    }
+
+    .product-info p {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .product-info .price {
+        font-weight: bold;
+        color: #000;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+    }
+
+    .product-info .rating {
+        color: #777;
+        margin-bottom: 25px;
+    }
+
+    .product-actions {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px; 
+    }
+
+    .product-info-container {
+    flex: 1;
+    margin-left: 70px;
+    border: 1px solid #ddd; /* Add border */
+    border-radius: 8px; /* Add border-radius */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box-shadow */
+}
+
+.product-info {
+    padding: 20px; /* Add padding to separate content from border */
+}
+  
+ 
+
+.popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        max-width: 300px;
+        text-align: center;
+        border-radius: 8px;
+    }
+
+    .popup .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        color: #888;
+    }
+
+    .popup button {
+        background-color: #e90b0b;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+    .price-container {
+    display: flex;
+    margin-bottom: 10px;
+    margin-bottom: 20px;
+    
+}
+
+/* Add styles for original and discounted prices */
+.original-price {
+    text-decoration: line-through;
+    color: #888;
+    margin-right: 10px;
+}
+
+.discounted-price {
+    color: #e44d26;
+    font-weight: bold;
+}
+
+/* Add styles for regular price if needed */
+.regular-price {
+    color: #000;
+}
+/* Zoom styles */
+.zoom-container {
+    position: relative;
+    /* overflow: hidden; */
+}
+
+.image {
+    width: 100%;
+    height: auto;
+}
+
+
+.lens {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* background-color: rgba(255, 255, 255, 0.6); */
+    /* display: none; */
+}
+
+.result {
+    position: absolute;
+    left: 100%; /* Change this to the desired position */
+    top: 0;
+    width: 500px;
+    height: 500px;
+    background-repeat: no-repeat;
+    background-color: rgb(235, 235, 235);
+    /* display: none; */
+}
+
+.zoom-container:hover .lens,
+.zoom-container:hover .result {
+    display: block;
+}
+.additional-info {
+    margin-top: 20px;
+}
+
+.additional-info p {
+    margin: 20px 0;
+}
+
+.additional-info p strong {
+    margin-right: 10px;
+    display: inline-block;
+    width: 100px; /* Adjust the width as needed */
+}
+.breadcrumbs {
+    margin-top: 30px;
+       margin-left: 30px;
+            background-color: #ffffff;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .breadcrumbs a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        .login-button {
+        background-color: #000000; /* Green */
+        border:  3px solid #575454;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+       
+    }
+
+    .login-button:hover {
+        background-color: #0e0e0e; /* Darker green */
+    }
+
+    .add-to-cart {
+        /* border: 1px solid #ccc;  */
+        border-radius: 8px; 
+        /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  */
+        padding: 10px;
+        width: fit-content; 
+        height: 60px;
+        margin-top: 20px;
+    }
+    .add-to-cart button{
+    background-color: #ffc107;
+    border-radius: 10px;
+    width: 90px;
+    height: 30px;
+    transition: transform 0.3s; 
+    cursor: pointer;
+    }
+
+    .add-to-cart button:hover {
+        transform: scale(1.1); /* Scale the button by 110% on hover */
+    }
+
+
+.product-rating {
+    margin-top: 10px;
+}
+
+.rating-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+
+
+
+
+</style>
+
+
+<div class="overlay" id="overlay"></div>
+
+
+
+
+<div class="product-details">
+    <div class="product-images">
+        <!-- Main Image -->
+        <div class="zoom-container">
+            <img src="<%= product.product_images[0] %>" alt="<%= product.name %>" class="main-image">
+            <div class="lens"></div>
+            <!-- Small Images -->
+            <div class="small-images">
+                <% product.product_images.forEach((image, index) => { %>
+                <img src="<%= image %>" alt="<%= product.name %>" class="small-image"
+                    onmouseover="changeMainImage('<%= image %>')">
+                <% }); %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-info-container">
+        <div class="product-info">
+            <div class="details-box">
+                <h2><%= product.name %></h2>
+                <p style="margin-top: 10px;"><%= product.description %></p> <!-- Adjusted margin-top for description -->
+                <h3 style="margin-top: 20px; text-decoration: underline;">Specifications</h3> <!-- Adjusted margin-top for specifications -->
+                <div class="additional-info" style="margin-top: 30px;"> <!-- Adjusted margin-top for additional info -->
+                    <p><strong>Category:</strong> <%= product.category %></p>
+                    <p><strong>Price:</strong> ₹ <%= product.price%></p>
+                </div>
+            </div>
+
+            <div class="additional-info">
+            <p><strong>Stock Available:</strong> <%= product.stock %></p>
+            </div>
+            <div class="add-to-cart">
+                <% if(issession) { %>
+                    <button class="btn btn-primary" onclick="addcart('<%= product.id %>')"> Add to Cart </button>
+                <% } else { %>
+                    <button class="btn btn-primary" onclick="window.location.href='/login'"> Login </button>
+                <% } %>
+            </div>
+            
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        <%-include('footer')%>
+
+        <script>
+            function addcart(productId) {
+            fetch(`/addcart/${productId}`, {
+             method: "POST"
+     })
+        .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        // Assuming you want to do something with the response data
+        return response.json(); // Assuming response is JSON, adjust accordingly
+     })
+    .then(data => {
+        if(data.error){
+            return
+        }
+        // Handle the data if needed
+        window.location.href = '/addcart'
+    })
+    .catch(error => {
+        // Handle errors here
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
+ </script>
+
+
+
+<script>
+    function changeMainImage(imageSrc) {
+        const mainImage = document.querySelector('.main-image');
+        // mainImage.style.opacity = '0'; // Set opacity to 0 for a fade-out effect
+        setTimeout(() => {
+            mainImage.src = imageSrc; // Change the image source
+            mainImage.style.opacity = '1'; // Set opacity back to 1 for a fade-in effect
+            const result = document.querySelector('.result');
+            result.style.backgroundImage = url("${imageSrc}"); // Update the result image
+        }, 100); // Adjust the duration to match the transition duration in CSS
+    }
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function closePopup() {
+        document.getElementById('statusPopup').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    function showPopup(message) {
+        document.getElementById('popupContent').innerHTML = message;
+        document.getElementById('statusPopup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    }
+   
+
+    document.getElementById('addToCartBtn').addEventListener('click', async () => {
+    const productId = '<%= product._id %>'; // Retrieve product ID from EJS data
+    try {
+        const response = await fetch('/add-to-cart/' + productId, { // Update endpoint to /add-to-cart/:id
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId })
+        });
+        const data = await response.json();
+        alert(data.message); // Show success or error message
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('An error occurred while adding to cart.');
+    }
+});
+
+
+</script>
+
+
+<script>
+    const containers = document.querySelectorAll(".zoom-container");
+    containers.forEach(container => {
+        const image = container.querySelector(".main-image");
+        const lens = document.createElement('div'); // Create lens element
+        const result = document.createElement('div'); // Create result element
+
+        lens.className = "lens"; // Add lens class
+        result.className = "result"; // Add result class
+
+        container.appendChild(lens); // Append lens to container
+        container.appendChild(result); // Append result to container
+
+        container.addEventListener("mousemove", zoomImage);
+        container.addEventListener("mouseenter", () => {
+            lens.style.display = "block";
+            result.style.display = "block";
+        });
+        container.addEventListener("mouseleave", () => {
+            lens.style.display = "none";
+            result.style.display = "none";
+        });
+
+        result.style.backgroundImage = `url('${image.src}')`;
+
+        function zoomImage(e) {
+            const { x, y } = getMousePos(e);
+
+            lens.style.left = x + "px";
+            lens.style.top = y + "px";
+
+            const imageRect = image.getBoundingClientRect();
+            const lensRect = lens.getBoundingClientRect();
+
+            const fx = (image.width / lensRect.width) * 1;
+            const fy = (image.height / lensRect.height) * 1;
+
+            result.style.backgroundSize = `${image.width * fx}px ${image.height * fy}px`;
+            result.style.backgroundPosition = `-${x * fx}px -${y * fy}px`;
+
+        }
+
+        function getMousePos(e) {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left - lens.offsetWidth / 2;
+            const y = e.clientY - rect.top - lens.offsetHeight / 2;
+            return { x, y };
+        }
+        result.style.display = "none";
+    });
+
+
+//.................................. Product Function.................................//
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

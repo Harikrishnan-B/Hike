@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .product-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            width: -3%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .close-btn {
+            margin-left: 10px; /* Add margin to create gap */
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body> 
+
+    <h1>Edit Product</h1>
+   
+    <form action="/admin/adminedit/<%=product._id %>" method="POST" class="product-form" id="product_form" enctype="multipart/form-data" >
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="<%= product.name %>" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required><%= product.description %></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" value="<%= product.price %>" required min="0">
+        </div>  
+        <div class="form-group">
+            <label for="price">Offer Price:</label>
+            <input type="number" id="offer" name="offer" value="<%= product.offer%>" required min="0">
+        </div>  
+        
+          <!-- <input  type="id" name="id" value="" hidden> -->
+
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <div>
+                <select class="form-control" name="category">
+                    <% category.forEach(cat => { %>
+                        <option value="<%= cat.name %>"  ><%= cat.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="stockQuantity">Stock Quantity:</label>
+            <input type="number" id="stock" name="stock" value="<%= product.stock %>" required min="0">
+        </div>
+        
+        <!-- Input field for uploading new images -->
+        
+        <div class="form-group">
+            <label for="newImages">Upload New Images:</label>
+
+            <!-- <input type="file" id="browse" name="product_images" multiple> -->
+            <input type="file" id="browse" name="image" multiple>
+            <!-- Ensure that the file input field has the name "image" -->
+
+
+            <!-- <input type="file" id="browse" name="file" multiple> -->
+
+
+            <small>Choose multiple files to upload</small>        
+        </div>
+
+        <div class="mb-3">
+        <label for="existingImages" class="form-label">Existing Images:</label>
+
+
+        <div id="imageContainer">
+        <% product.product_images.forEach((image, index) => { %>
+        <div class="image-container"  data-index="<%= index %>">
+        <img src="<%= image %>" alt="Product Image" class="prtimage" style="max-width: 100%; height: 150px">
+        <span class="close-btn" onclick="deleteImage('<%= product._id %>', '<%= index %>')">&#10006;</span>
+    </div>
+    <% });%>
+    </div>
+    </div> 
+        <button type="submit">Update Product</button>
+    </form>
+    
+</body>
+
+
+<script>
+
+
+async function deleteImage(productId, index) {
+            const imageItem = document.querySelector(`.image-container[data-index="${index}"]`);
+            try {
+                const response = await fetch(`/admin/delete-image/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ index }), 
+                });
+                if (response.ok) {
+                    // Remove the image element from the DOM
+                    imageItem.remove();
+                } else {
+                    console.error('Failed to delete image from the server');
+                }
+            } catch (error) {
+                console.error('Error deleting image:', error);
+            }
+        }
+
+</script>
+
+
+<script>
+    document.getElementById('browse').addEventListener('change', function() {
+        previewFiles('#imageContainer', '#browse');
+    });
+
+    function previewFiles(containerSelector, inputSelector) {
+        const preview = document.querySelector(containerSelector);
+        const files = document.querySelector(inputSelector).files;
+        function removeImage(e) {
+        e.currentTarget.parentElement.remove();
+        }
+
+        if (files) {
+            Array.prototype.forEach.call(files, (file, i) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const newDiv = document.createElement('div');
+                    newDiv.classList.add('ms-2', 'image-item');
+                    const newImg = document.createElement('img');
+                    newImg.src = reader.result;
+                    newImg.alt = file.name;
+                    newImg.style.maxWidth = '50%';
+                    newImg.style.height = '150px';
+                    const newButton = document.createElement('button');
+                    newButton.classList.add('close-btn');
+                    newButton.innerHTML = '&#10006;';
+                    newButton.addEventListener('click', removeImage);
+                    newDiv.appendChild(newImg);
+                    newDiv.appendChild(newButton);
+                    preview.appendChild(newDiv);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+
+    document.getElementById('product_form').addEventListener('submit', function(event) {
+            const price = parseFloat(document.getElementById('price').value);
+            const offer = parseFloat(document.getElementById('offer').value);
+
+            if (offer > price) {
+                event.preventDefault(); // Prevent the form from being submitted
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Offer Price',
+                    text: 'Offer price cannot be greater than the current price.',
+                });
+            }
+            
+        });
+
+</script>
+
+</body>
+</html>

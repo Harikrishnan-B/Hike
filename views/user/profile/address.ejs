@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title>Futuristic Address Page</title> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        .container-xl {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .nav-borders .nav-link {
+            color: #555;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+        .nav-borders .nav-link.active,
+        .nav-borders .nav-link:hover {
+            color: #007bff;
+            border-color: #007bff;
+        }
+        .address-box {
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        .address-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            transition: background-color 0.3s;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+    </style>
+</head>
+<body>
+  
+<div class="container-xl">
+    <!-- Account page navigation-->
+    <nav class="nav nav-borders">
+        <a class="nav-link" href="/profile" target="__blank">Profile</a>
+        <a class="nav-link active" href="/address">Address</a>
+        <a class="nav-link" href="/password">Security</a>
+        <a class="nav-link" href="../orderPage">My Orders</a>
+        <a class="nav-link" href="./wallet">My Wallet</a>
+    </nav>
+    <hr class="mt-0 mb-4">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Add New Address
+            </button>
+        </div>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <% if(locals.address){ %>
+                <% address.forEach(e => { %>
+                    <div class="col">
+                        <div class="address-box">
+                            <h5 class="card-title"><%= e.name %></h5>
+                            <p class="card-text"><%= e.housename %></p>
+                            <p class="card-text"><%= e.town %></p>
+                            <p class="card-text"><%= e.district %></p>
+                            <p class="card-text"><%= e.state %></p>
+                            <p class="card-text"><%= e.country %></p>
+                            <p class="card-text"><%= e.zipcode %></p>
+                            <button onclick=<%= `editAddress(event,"${e.id}")` %> class="btn btn-primary">✏️</button>
+                            <a class="btn btn-danger" onclick="confirmDelete('/deleteaddress/<%= e._id %>')">🗑️</a>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-bCMuZiFX1+9Azh0MHOlnvUICoVMwaG8W/lS+1jH4sOs2eOE4o7xwic7Pa2Q+QTfO" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-AE8CKFTA1+phDDCv6QAdnd86Nv/ROQprQm6g4SXPfgpRyFsz7QWxTPhYsUUktZkV" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+      
+       
+       
+       
+       
+       <!-- New Address Modal -->
+       <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+         <div class="modal-dialog">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h1 class="modal-title fs-5" id="staticBackdropLabel">User Address Form</h1>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body">
+               
+       
+               <div class="container">
+                 
+                 <form id="addressForm" method="post" action="/address">
+                  
+                   <div class="form-group">
+                     <label for="name"> Name:</label>
+                     <input type="text" id="name" name="name" required>
+                   </div>
+       
+                   <div class="form-group">
+                     <label for="housename">House Name:</label>
+                     <input type="text" id="housename" name="housename" required>
+                   </div>
+                   <div class="form-group">
+                    <label for="addresstype">Address Type:</label>
+                    <input type="text" id="addresstype" name="addresstype" required pattern="^(office|house)$">
+                    <small class="form-text text-muted">Valid options: office, house</small>
+                  </div>
+                  
+                   <div class="form-group">
+                     <label for="town">Town:</label>
+                     <input type="text" id="town" name="town" required>
+                   </div>
+                   <div class="form-group">
+                     <label for="district">District:</label>
+                     <input type="text" id="district" name="district" required>
+                   </div>
+                   <div class="form-group">
+                     <label for="state">State:</label>
+                     <input type="text" id="state" name="state" required>
+                   </div>
+                   <div class="form-group">
+                     <label for="country">Country:</label>
+                     <input type="text" id="country" name="country" required>
+                   </div>
+                   <div class="form-group">
+                     
+                     <!-- <form id="addressForm" method="post" action="/address" onsubmit="return validateZipCode()"> -->
+                      <label for="zipcode">Zip Code:</label>
+                     <input type="number" id="zipcode" name="zipcode" required min="0" >
+
+                   </div>
+                  
+                   
+
+
+                 </form>
+               </div>
+       
+             </div>
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               <button type="submit"  form="addressForm" class="btn btn-primary">Submit</button>
+             </div>
+           </div>
+         </div>
+       </div>
+
+
+
+
+     <!-- Edit Address -->
+
+     <div class="modal fade" id="editaddressmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Address</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <form id="editAdress" action="/user/profile/address" method="POST" >
+        
+              
+          <div class="modal-body">
+              <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+              <div id="success-message" class="alert alert-success" style="display: none;"></div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+                <input type="text" id="categoryName" name="name" class="form-control x" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Housename</span>
+                <input type="text" id="categoryName" name="housename" class="form-control x" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Town</span>
+                <input type="text" id="categoryName" name="town" class="form-control x"  aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">District</span>
+                <input type="text" id="categoryName" name="district" class="form-control x" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">State</span>
+                <input type="text" id="categoryName" name="state" class="form-control x" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Country</span>
+                <input type="text" id="categoryName" name="country" class="form-control x" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">zipcode</span>
+                <input type="text" id="categoryName" name="zipcode" class="form-control x" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+              </div>
+           
+            </div>
+              
+          
+      
+          <button type="submit" form="editAdress" class="btn btn-primary">Edit Address</button>
+        </form>
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+  function confirmDelete(url) {
+      
+      swal({
+          title: "Are you sure?",
+          text: "You want to delete address!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+      })
+      .then((willDelete) => {
+          if (willDelete) {
+              // If user confirms, proceed with deletion
+
+              window.location.href = url
+
+          } else {
+              // If user cancels, do nothing
+              swal("Your address is safe!", {
+                  icon: "info",
+              });
+          }
+      });
+  }
+</script>
+
+
+<script>
+  async function editAddress(a,b){
+    const editmodal =new bootstrap.Modal('#editaddressmodal')
+    editmodal.show()
+   let data= await fetch(`/addressEdit/${b}`);
+   data = await data.json()
+    let inputs=document.querySelectorAll(".x");
+    inputs.forEach((a,b)=>{
+
+      a.value=data.data[0][a.name]
+    })
+   let action= document.getElementById("editAdress");
+   action.action=`/addressEdit/${b}`
+  }
+</script>
+
+
+</html>

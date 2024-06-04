@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-top: 20px;
+      text-align: center; 
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;       
+    }
+
+    th {
+      background-color: #201a1d;
+      color: #fff;
+      width: 800px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+
+    td a {
+      display: inline-block;
+      text-decoration: none;
+      padding: 5px 10px;
+      /* background-color: #007bff; */
+      color: #000000;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    td a:hover {
+      background-color: #0056b3;
+    }
+
+    .create-button {
+      display: inline-block;
+      text-decoration: none;
+      padding: 10px 20px;
+      background-color: #28a745; /* Green color for the button */
+      color: #fff;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+      margin-right: 10px; /* Add some spacing between the button and the table */
+    }
+
+    .create-button:hover {
+      background-color: #218838; /* Darker green color on hover */
+    }
+    .search-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .search-input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 300px;
+      margin-right: 10px;
+    }
+
+    .search-button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #000000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    
+    .search-button:hover {
+      background-color: #0056b3;
+    }
+    #logout{
+      background-color:red;
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('./partials/bootstrap.ejs') %>
+  <link rel="stylesheet" href="/stylesheets/admin/admin_product.css">
+</head>
+<body>
+  <%- include('./partials/header.ejs') %>
+  <div style="display: flex;">
+    <div style="flex:1">
+      <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 250px; height: 648px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+          <!-- <span class="fs-4">Sidebar</span> -->
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="./userlist" class="nav-link text-white active" >
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+              Customers
+            </a>
+          </li>
+          <li>
+            <a href="./adminDashboard" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="./adminOrder" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+              Orders
+            </a>
+          </li>
+          <li>
+            <a href="./product" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./product.ejs"/></svg>
+              Products
+            </a>
+          </li>
+          <li>
+            <a href="./category" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./category.ejs"/></svg>
+              Category
+            </a>
+          </li>
+          <li>
+            <a href="./coupon" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./coupon.ejs"/></svg>
+              Coupon
+            </a>
+          </li>
+          <a href="./sales" class="nav-link text-white">
+            <svg class="bi pe-none me-2" width="16" height="16"><use href="./salesReport.ejs"/></svg>
+            Report
+          </a>
+        </ul>
+        <hr>
+        
+      </div>
+    </div>
+
+
+  
+<div class="container-fluid " style="margin-left: 5px;">
+
+
+  
+ 
+
+  <table>
+    <thead>   
+      <tr>
+        <th>Index</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+<tbody>
+  <% users.forEach((user, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td> 
+        <td><%= user.firstname + ' ' + user.lastname %></td>
+        <td><%= user.email %></td>
+        <td>
+            <% if(user.isBlocked) { %>
+               Blocked
+            <% } else { %>
+               Active
+            <% } %>
+        </td>
+        <td>
+          <a style="background-color: #218838;" href="/admin/blocked/<%= user._id %>">
+             <% if(user.isBlocked) { %>
+            Unblock
+         <% } else { %>
+            Block
+         <% } %></a>
+        </td>
+      </tr>
+  <% }) %>
+</tbody>
+
+  </table>
+  
+  
+
+</div>
+</body>
+
+
+
+</html>

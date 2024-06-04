@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hike Sales and Marketing News</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      font-family: 'Irish Grover', cursive;
+    }
+
+    .header {
+      width: 100%;
+      background-color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container img {
+      height: 85px;
+      width: auto;
+      border-radius: 50%;
+      margin-left: 680px;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 150px; /* Adjust to avoid overlap with the fixed header */
+    }
+
+    .hike-text {
+      font-size: 4rem;
+      font-weight: bold;
+      opacity: 0;
+      animation: fadeIn 2s forwards, moveUp 2s forwards;
+    }
+
+    .news-list {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 2s 3s forwards; /* 2s duration with 3s delay */
+      text-align: left; /* Align text to the left */
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes moveUp {
+      to {
+        transform: translateY(-20px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <a href="/home">
+        <img src="/images/Screenshot (58).png" alt="Logo">
+      </a>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h1 class="hike-text">Hike</h1>
+    <ul class="news-list">
+      <li><strong>News:</strong> In a recent announcement, Hike, the globally renowned sportswear brand, revealed record-breaking sales figures for the first quarter of 2024.</li>
+      <li>The company reported a staggering 20% increase in revenue compared to the same period last year, bringing their total sales to an unprecedented $3.5 billion.</li>
+      <li><strong>Innovative Product Lines:</strong> The introduction of the new Hike AirMax series, featuring advanced cushioning technology and sustainable materials, has been a major hit among consumers.</li>
+      <li>The AirMax 2024, in particular, sold over 1 million units within the first month of its release.</li>
+      <li><strong>E-commerce Boom:</strong> With the rise of online shopping, Hike's e-commerce platform saw a 25% increase in traffic, contributing significantly to overall sales.</li>
+      <li>The brand's seamless online shopping experience, coupled with exclusive online releases, has been a key driver of this growth.</li>
+      <li>Hike embraced digital transformation, with the launch of Hike+, a platform that integrates technology with fitness and sports.</li>
+      <li>Collaborations with celebrities, designers, and athletes have kept Hike at the forefront of fashion and sports culture.</li>
+    </ul>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const hikeText = document.querySelector('.hike-text');
+      const newsList = document.querySelector('.news-list');
+
+      setTimeout(() => {
+        hikeText.classList.add('visible');
+      }, 1000);
+
+      setTimeout(() => {
+        newsList.classList.add('visible');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <%- include('./partials/bootstrap.ejs') %>
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.css">
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<!-- DataTable HEADER-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
+
+<!-- Style -->
+  <link rel="stylesheet" href="/stylesheets/admin/admin_product.css">
+
+<!-- Crop -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css'>
+
+<style>
+    #imageError {
+    color: red;
+  }
+</style>
+
+</head>
+<body>
+  <%- include('./partials/header.ejs') %>
+  <div style="display: flex;">
+    <div style="flex:1">
+      <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 250px; height: 100%;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+          <!-- <span class="fs-4">Sidebar</span> -->
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="./userlist" class="nav-link text-white " >
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+              Customers
+            </a>
+          </li>
+          <li>
+            <a href="./adminDashboard" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="./adminOrder" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+              Orders
+            </a>
+          </li>
+          <li>
+            <a href="./product" class="nav-link text-white active">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./product.ejs"/></svg>
+              Products
+            </a>
+          </li>
+          <li>
+            <a href="./category" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./category.ejs"/></svg>
+              Category
+            </a>
+          </li>
+          <li>
+            <a href="./coupon" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./coupon.ejs"/></svg>
+              Coupon
+            </a>
+          </li>
+          <a href="./sales" class="nav-link text-white">
+            <svg class="bi pe-none me-2" width="16" height="16"><use href="./salesReport.ejs"/></svg>
+            Report
+          </a>
+        </ul>
+        <hr>
+      </div>
+    </div>
+    <div style="flex:4">
+      <div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 155px; margin-left: 1050px; margin-bottom: 20px;">
+          Add New Product
+        </button>
+      </div>
+     
+      <!-- <table style="border-collapse: collapse; width: 100%;"> -->
+        <table id="example" class="table table-striped" style="width:100%">
+
+        <thead>
+            <tr style="border-bottom: 1px solid #000;">
+            <th style="border: 1px solid #000; padding: 8px;">#</th>
+            <th style="border: 1px solid #000; padding: 8px;">Name</th>
+            <th style="border: 1px solid #000; padding: 8px;">Description</th>
+            <th style="border: 1px solid #000; padding: 8px;">Price</th>
+            <!-- <th style="border: 1px solid #000; padding: 8px;">Offer(%)</th> -->
+            <th style="border: 1px solid #000; padding: 8px;">Category</th>
+            <th style="border: 1px solid #000; padding: 8px;">Stock</th>
+            <th style="border: 1px solid #000; padding: 8px;">Image</th>
+            <th style="border: 1px solid #000; padding: 8px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.forEach((product, index) => { %>
+            <tr style="border-bottom: 1px solid #000;">
+              <td style="border: 1px solid #000; padding: 8px;"><%= index + 1 %></td> 
+              <td style="border: 1px solid #000; padding: 8px;"><%= product.name %></td>
+              <td style="border: 1px solid #000; padding: 8px;"><%= product.description %></td>
+              <td style="border: 1px solid #000; padding: 8px;"><%= product.price %></td>
+              <td style="border: 1px solid #000; padding: 8px;"><%= product.category %></td>
+              <td style="border: 1px solid #000; padding: 8px;"><%= product.stock %></td>
+              <td style="border: 1px solid #000; padding: 8px;"><img src="<%= product.product_images.length > 0 ? product.product_images[0] : '' %>" style="width: 100px; height: 100px;"></td>
+              <td style="border: 1px solid #000; padding: 8px;">
+                <a href="/admin/adminedit/<%= product._id %>"><button>Edit</button></a>
+                <select name="status" onchange="setstatus('<%= product._id %>', this.value)">
+                  <option value="listed" <%= product.islisted ? 'selected' : '' %>>Listed</option>
+                  <option value="unlisted" <%= !product.islisted ? 'selected' : '' %>>Unlisted</option>
+                </select>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+
+
+
+  <!-- new product modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="newproductform" action="/admin/product" method="POST" enctype="multipart/form-data">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default">Product Name</span>
+              <input type="text" name="name" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default">Description</span>
+              <input type="text" name="description" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
+              <input type="number" name="price" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" min="0">
+            </div>
+            <!-- <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default">Offer</span>
+              <input type="number" name="price" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" min="0">
+            </div> -->
+          
+
+            <div class="input-group mb-3">
+              <label for="Category" class="input-group-text">Category</label>
+              <select class="form-control" name="category">
+                  <% category.forEach(cat => { %>
+                      <option value="<%= cat.name %>"  ><%= cat.name %></option>
+                  <% }); %>
+              </select>
+           </div>
+      
+        
+          
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
+              <input type="number" name="stock" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" min="0">
+            </div> 
+        <label for="fileUploader">Product Images:</label>
+        <!-- <input type="file" id="fileUploader" data-image-preview="#imagePreview" name="image" accept=".jpg,.png,.jpeg" multiple> -->
+        <input type="file" id="fileUploader" data-image-preview="#imagePreview" name="image" accept=".jpg,.png,.jpeg" multiple>
+
+        <div id="imagePreview"></div>
+        <div class="error-message" id="imageError"></div>
+    
+        <button type="submit" form="newproductform" class="btn btn-primary">Publish Product</button>
+      </form>
+
+           <!-- cropper modal -->
+    <div id="cropper110Modal">
+      <div id="imageCropBox">
+          <div style="text-align: end;">
+              <button class="cropper110-close">close</button>
+          </div>
+          <section class="cropper110-page">
+              <div class="cropper110-box">
+              <div class="cropper110-cropping-box"></div>
+              </div>
+              <div>
+              <button class="cropper110-crop mx-3">Crop</button>
+              </div>
+          </section>
+       </div>
+    </div>
+
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
+  <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+  const form = document.getElementById("newproductform");
+  const productNameInput = document.querySelector('input[name="name"]');
+  const descriptionInput = document.querySelector('input[name="description"]');
+  const priceInput = document.querySelector('input[name="price"]');
+  const stockInput = document.querySelector('input[name="stock"]');
+  const imageInput = document.getElementById("fileUploader");
+
+  form.addEventListener("submit", function(event) {
+    let isValid = true;
+
+    // Validate Product Name
+    if (productNameInput.value.trim() === "") {
+      isValid = false;
+      productNameInput.classList.add("is-invalid");
+    } else {
+      productNameInput.classList.remove("is-invalid");
+    }
+
+    // Validate Description
+    if (descriptionInput.value.trim() === "") {
+      isValid = false;
+      descriptionInput.classList.add("is-invalid");
+    } else {
+      descriptionInput.classList.remove("is-invalid");
+    }
+
+    // Validate Price
+    if (isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
+      isValid = false;
+      priceInput.classList.add("is-invalid");
+    } else {
+      priceInput.classList.remove("is-invalid");
+    }
+
+    // Validate Stock
+    if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0) {
+      isValid = false;
+      stockInput.classList.add("is-invalid");
+    } else {
+      stockInput.classList.remove("is-invalid");
+    }
+
+    // Validate Image
+    if (imageInput.files.length <3) {
+      isValid = false;
+      document.getElementById("imageError").innerText = "At least 3 images should be selected.";
+    } else {
+      document.getElementById("imageError").innerText = "";
+      
+    }
+
+    if (!isValid) {
+      event.preventDefault();
+    }
+  });
+
+  // Reset validation on input change
+  [productNameInput, descriptionInput, priceInput, stockInput].forEach(function(input) {
+    input.addEventListener("input", function() {
+      input.classList.remove("is-invalid");
+    });
+  });
+
+  // Reset validation on image selection change
+  imageInput.addEventListener("change", function() {
+    document.getElementById("imageError").innerText = "";
+  });
+});
+
+
+ // crop
+ let fileInputs = document.querySelectorAll('[data-image-preview]');
+        let croppingBox = document.querySelector('.cropper110-cropping-box');
+        let cropButton = document.querySelector('.cropper110-crop');
+        let closeButton = document.querySelector('.cropper110-close');
+        let cropper = null;
+        let currentInput = null;
+        let imgNames = null;
+
+        fileInputs.forEach(fileInput => {
+            fileInput.addEventListener('change', () => {
+                let previewDiv = document.querySelector(fileInput.dataset.imagePreview);
+                previewDiv.innerHTML = "";
+                for (let each of fileInput.files) {
+                    let imgSrc = URL.createObjectURL(each);
+                    let img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.dataset.fileName = each.name;
+                    img.dataset.input = fileInput.id;
+                    img.addEventListener('click', cropImage);
+                    previewDiv.append(img);
+                }
+            });
+        });
+
+        function cropImage(e) {
+            document.getElementById('cropper110Modal').style.display = 'flex';
+            let img = document.createElement('img');
+            img.src = e.target.src;
+            img.id = 'image';
+            croppingBox.innerHTML = '';
+            croppingBox.appendChild(img);
+            cropper = new Cropper(img);
+            imgNames = e.target.dataset.fileName;
+            currentInput = e.target.dataset.input;
+        }
+
+        // Crop and save on click
+        cropButton.addEventListener('click', e => {
+            e.preventDefault();
+            let imgSrc = cropper.getCroppedCanvas({
+                width: 300 // input value
+            }).toDataURL();
+            if (imgSrc && imgNames !== null) {
+                let fileUploader = document.getElementById(currentInput);
+                fetch(imgSrc)
+                    .then(res => res.blob())
+                    .then(blob => {
+                        let file = new File([blob], `${imgNames}-${Date.now()}.png`, { type: "image/jpeg" });
+                        const dt = new DataTransfer();
+                        for (let each of fileUploader.files) {
+                            if (each.name !== imgNames) {
+                                dt.items.add(each);
+                            } else {
+                                dt.items.add(file);
+                            }
+                        }
+                        fileUploader.files = dt.files;
+                        let previewDiv = document.querySelector(fileUploader.dataset.imagePreview);
+                        previewDiv.innerHTML = "";
+                        let res = "";
+                        for (let each of fileUploader.files) {
+                            let src = URL.createObjectURL(each);
+                            res += `<img src="${src}" data-file-name="${each.name}" data-input="${fileUploader.id}" onclick="cropImage(event)" class="previewImages">`;
+                        }
+                        previewDiv.innerHTML = res;
+                    });
+            }
+            closeButton.click();
+        });
+
+        closeButton.addEventListener('click', () => {
+            document.getElementById('cropper110Modal').style.display = 'none';
+            if (cropper) {
+                cropper.destroy();
+            }
+        });
+
+
+
+
+  </script>
+
+
+ <!-- DATATABLE  SCRIPT-->
+ <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+ <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>  
+ 
+ <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>  
+ <script>
+   new DataTable('#example');
+
+</script>
+ 
+<!--Soft  Delete Product -->
+
+<script>
+  function setstatus(id, selectedValue){
+     var sendData = {};
+     console.log(selectedValue);
+     if (selectedValue == 'listed') {
+         sendData = {islisted:true};
+     } else if (selectedValue == 'unlisted') {
+         sendData = {islisted:false};
+     }
+     console.log(sendData);
+     fetch(`/admin/productstatus/${id}`, {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(sendData)
+     })
+     .then(response => {
+         console.log('Request sent successfully');
+     })
+     .catch(error => {
+         console.error('Error sending request:', error);
+     });
+   }
+</script>
+
+
+
+
+
+</body>
+</html>

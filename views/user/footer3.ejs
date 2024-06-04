@@ -1,0 +1,119 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device=width, initial-scale=1.0">
+  <title>Hike Careers</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      font-family: 'Irish Grover', cursive;
+    }
+
+    .header {
+      width: 100%;
+      background-color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container img {
+      height: 85px;
+      width: auto;
+      border-radius: 50%;
+      margin-left: 680px;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 150px; /* Adjust to avoid overlap with the fixed header */
+    }
+
+    .hike-text {
+      font-size: 4rem;
+      font-weight: bold;
+      opacity: 0;
+      animation: fadeIn 2s forwards, moveUp 2s forwards;
+    }
+
+    .careers-list {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 2s 3s forwards; /* 2s duration with 3s delay */
+      text-align: left; /* Align text to the left */
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes moveUp {
+      to {
+        transform: translateY(-20px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <a href="/home">
+        <img src="/images/Screenshot (58).png" alt="Logo">
+      </a>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h1 class="hike-text">Careers at Hike</h1>
+    <ul class="careers-list">
+      <li><strong>Join Us:</strong> At Hike, we are always on the lookout for passionate and talented individuals to join our team.</li>
+      <li><strong>Open Positions:</strong></li>
+      <li>1. <strong>Software Engineer:</strong> Work on cutting-edge technologies to improve our digital platforms. Requirements: 3+ years of experience in software development, proficiency in JavaScript and Python.</li>
+      <li>2. <strong>Product Designer:</strong> Create visually appealing and user-friendly product designs. Requirements: Strong portfolio, experience with design software like Adobe XD and Sketch.</li>
+      <li>3. <strong>Marketing Specialist:</strong> Develop and execute marketing strategies to enhance brand visibility. Requirements: 2+ years of experience in marketing, excellent communication skills.</li>
+      <li>4. <strong>Sales Manager:</strong> Drive sales growth through innovative sales strategies. Requirements: Proven track record in sales, excellent leadership skills.</li>
+      <li>5. <strong>Customer Support Representative:</strong> Provide exceptional support to our customers. Requirements: Strong problem-solving skills, excellent communication abilities.</li>
+ 
+    
+    </ul>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const hikeText = document.querySelector('.hike-text');
+      const careersList = document.querySelector('.careers-list');
+
+      setTimeout(() => {
+        hikeText.classList.add('visible');
+      }, 1000);
+
+      setTimeout(() => {
+        careersList.classList.add('visible');
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Category</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
+
+
+    <style>
+
+      body{
+        background-color: #fcfcfc;
+      }
+
+
+        .container {
+            margin-top: 50px;
+           
+        }
+
+        .style{
+            
+            background-color: #ffffff;
+            border-radius: 2px;
+            border : 1px solid #000000;
+            box-shadow: 2px;
+            width: 1000px;
+            height: 400px;
+            
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            color: #fff;
+            padding: 10px 20px;
+            margin-left: 150px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+
+</head>
+<body>
+    
+<div class="container">
+    <div class="style">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 style="margin-left: 150px; margin-top: 30px;">Edit Category</h2>
+             <form id="editCategoryForm" method="POST" action="/admin/categoryEdit/<%=category._id%>">
+                <div class="form-group" style="padding-top: 100px;">
+                    <!-- <label for="editCategoryName" class="form-label">Category Name</label> -->
+                    <input type="text" class="form-control" id="editCategoryName" name="editCategoryName" value="<%=category.name%>" placeholder="Enter category name">
+                    <input type="number" class="form-control" id="editCategoryDiscount" name="editCategoryDiscount" value="<%=category.catoffer%>" placeholder="Enter Discount">
+
+                 </div>
+                
+
+                 <% if(message){ %>
+                  <p style="color: red;"><%= message%></p>
+                  <% } %>
+                  <button type="submit" class="btn btn-primary" onclick="confirmSaveChanges(event)">Save Changes</button>
+
+
+             </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
+           <!--Sweet Alert for Edit Confirmation of Category-->
+
+           <script>
+            function confirmSaveChanges(event) {
+                event.preventDefault(); // Prevent form submission
+                
+                // Show SweetAlert confirmation dialog
+                swal({
+                    title: "Are you sure you want to save changes?",
+                    text: "Once saved, the changes will be applied.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: false,
+                })
+                .then((willSave) => {
+                    if (willSave) {
+                        // If user confirms, submit the form
+                        event.target.form.submit();
+                    } else {
+                        // If user cancels, do nothing
+                        swal("Your changes were not saved.", {
+                            icon: "info",
+                        });
+                    }
+                });
+            }
+        </script>
+        
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+</body>
+</html>

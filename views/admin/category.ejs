@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <%- include('./partials/bootstrap.ejs') %>
+  <link rel="stylesheet" href="/stylesheets/admin/admin_product.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+</head>
+<body>
+  
+  <%- include('./partials/header.ejs') %>
+  
+  <div style="display: flex;">
+    <div style="flex:1;height: 100vh; " >
+      <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 250px; height: 648px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+          
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="./userlist" class="nav-link text-white " >
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+              Customers
+            </a>
+          </li>
+          <li>
+            <a href="./adminDashboard" class="nav-link text-white ">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="./adminOrder" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+              Orders
+            </a>
+          </li>
+          <li>
+            <a href="./product" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./product.ejs"/></svg>
+              Products
+            </a>
+          </li>
+          <li>
+            <a href="./category" class="nav-link text-white active">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./category.ejs"/></svg>
+              Category
+            </a>
+          </li>
+          <li>
+            <a href="./coupon" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use href="./coupon.ejs"/></svg>
+              Coupon
+            </a>
+          </li>
+          <a href="./sales" class="nav-link text-white">
+            <svg class="bi pe-none me-2" width="16" height="16"><use href="./salesReport.ejs"/></svg>
+            Report
+          </a>
+        </ul>
+        <hr>
+      </div>
+    </div>
+
+    <div style="flex:4">
+      <div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 155px; margin-left: 1050px; margin-bottom: 20px;">
+          Add Category
+        </button>
+      </div>
+     
+      <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+          <tr style="border-bottom: 1px solid #000;">
+            <th style="border: 1px solid #000; padding: 8px;">Sl No</th>
+            <th style="border: 1px solid #000; padding: 8px;">Category</th>
+            <th style="border: 1px solid #000; padding: 8px;">Offer( in %)</th>
+            <th style="border: 1px solid #000; padding: 8px;">Listed</th>
+            <th style="border: 1px solid #000; padding: 8px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% categories.forEach((category, index) => { %>
+            <tr style="border-bottom: 1px solid #000;">
+              <td style="border: 1px solid #000; padding: 8px;"><%= index + 1 %></td> 
+              <td style="border: 1px solid #000; padding: 8px;"><%= category.name %></td> 
+              <td style="border: 1px solid #000; padding: 8px;"><%= category.catoffer %></td>  
+              <td>
+                <% if(category.islisted) {%>
+                   listed
+                   <% }else{ %>
+                   Unlisted<% } %>
+              </td>
+
+              <!-- <div id="pagination"></div> -->
+
+
+              <td style="border: 1px solid #000; padding: 8px;">
+                <a href="/admin/CategoryEdit/<%= category._id %>" ><button>Edit</button></a>
+                <a href="/admin/catdelete/<%= category._id %>" onclick="confirmDelete(event)"><button>Delete</button></a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>  
+
+    </div>
+
+
+
+
+
+                  <!-- New Category Modal -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Category</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+        <div id="success-message" class="alert alert-success" style="display: none;"></div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">Category Name</span>
+          <input type="text" id="categoryName" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-default">Discount %</span>
+          <input type="number" id="categoryDiscount" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="addCategoryBtn" class="btn btn-primary">Add Category</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+                
+
+<script>
+  document.getElementById('addCategoryBtn').addEventListener('click', function() {
+    var categoryName = document.getElementById('categoryName').value;
+    var categoryDiscount = document.getElementById('categoryDiscount').value;
+
+    fetch('/admin/newcategory', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ category: categoryName ,catoffer:categoryDiscount})
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.error) {
+        // Handle error
+        console.error('Error occurred:', data.error);
+        document.getElementById('error-message').innerText = data.error;
+        document.getElementById('error-message').style.display = 'block';
+      } else {
+        // Handle success
+        console.log(data); // Log response from the server
+        // document.getElementById('success-message').innerText = 'Category added successfully.';
+        // document.getElementById('success-message').style.display = 'block';
+        // // Optionally, you can reset the input field here
+        // document.getElementById('categoryName').value = '';
+        // Close the modal
+        window.location.href="/admin/category"
+        // You might need to refresh the categories list or update it in some way
+      }
+    })
+    .catch(error => {
+      // Handle network or other errors
+      console.error('There was a problem with the fetch operation:', error);
+      document.getElementById('error-message').innerText = 'An error occurred while adding the category.';
+      document.getElementById('error-message').style.display = 'block';
+    });
+  });
+</script>
+
+
+                 
+                                                     
+
+
+
+
+
+
+                          <!--Sweet Alert For Deletion Of Category-->
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+  function confirmDelete(event) {
+      event.preventDefault(); // Prevent default link behavior
+      
+      // Show SweetAlert confirmation dialog
+      swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover this category!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+      })
+      .then((willDelete) => {
+          if (willDelete) {
+              // If user confirms, proceed with deletion
+              window.location.href = event.target.parentElement.getAttribute('href');
+          } else {
+              // If user cancels, do nothing
+              swal("Your category is safe!", {
+                  icon: "info",
+              });
+          }
+      });
+  }
+</script>
+
+
+</body>
+</html>
+
+

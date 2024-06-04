@@ -1,0 +1,85 @@
+<head>
+    <style>
+        body {
+            margin: 0; /* Remove default margin */
+        }
+
+        .top_offer {
+            background-color: rgb(250, 250, 250);
+            width: 100%;
+            height: 40px;
+            display: flex;
+            color: rgb(0, 0, 0);
+            align-items: center;
+            padding: 0 10px; /* Adjusted padding */
+            font-family: 'Irish Grover', cursive;
+            background-color: #ffffff;
+        }
+
+        header a {
+            text-decoration: none;
+            color: black;
+            font-size: large;
+        }
+
+        .navbarx {
+            padding-left: 0;
+        }
+
+        .style {
+            font-family: 'Irish Grover', cursive;
+            padding: 0 20px;
+        }
+
+        .itemz {
+            margin-left: 15px; 
+    display: flex;
+    font-size: small;
+        }
+
+        .itemz:not(:first-child) {
+            margin-left: 40px; /* Gap between categories */
+        }
+
+        .header-container {
+            width: 100%; /* Ensure header spans full width */
+            background-color: rgb(255, 255, 255);
+            padding: 10px; /* Remove default padding */
+            margin: 0; /* Remove default margin */
+            overflow-x: hidden;          
+            box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1); /* Add shadow at the bottom */
+
+
+        }
+
+        .description-header-container {
+    padding: 5px; /* Adjust the padding */
+}
+
+.description-header-container .style {
+    padding: 0 10px; /* Adjusted padding */
+}
+
+.description-header-container .itemz {
+    margin-left: 10px; /* Adjusted margin */
+    font-size: smaller; /* Adjusted font size */
+}
+
+
+    </style>
+</head>
+<header style="margin-top: -60px;">
+    <div class="header-container">
+        <div class="style">
+            <div style=" display: flex; align-items: center; padding-top: 52px;">
+                <div><a href="/home"><img src="/images/Screenshot (58).png" alt="" style="height: 85px; width: auto; border-radius: 50%;"></a></div>
+                <% category.forEach(cat => { %>
+                    <div class="itemz"><a href="/category/<%= cat.name %>"><%= cat.name %> </a></div>
+                <% }); %>
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+

@@ -1,0 +1,421 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            align-items: center;
+            text-align: center;
+        }
+
+        .side-nav {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            width: 200px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .side-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .side-nav a {
+            text-decoration: none;
+            color: #fff;
+            display: block;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 3px;
+            border-radius: 20px;
+            transition: 0.33s ease-in-out;
+            font-weight: 500;
+        }
+
+        .side-nav a:hover {
+            color: black;
+            background-color: white;
+            border-radius: 20px;
+        }
+
+         /* Main Content Area */
+         .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto; /* Added overflow-y to allow scrolling if content overflows */
+            margin-left: 200px;
+        }
+
+        form {
+            max-width: 1000px;
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 40px;
+            margin-bottom: 280px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        input[type="file"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        #preview {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .image-container {
+            position: relative;
+            width: 30%;
+            margin-bottom: 10px;
+        }
+
+        #preview img {
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 5px;
+            background-color: #f0f0f0;
+            color: black;
+            border: none;
+            border-radius: 5px solid black;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="side-nav">
+        <ul>
+            <li><a href="/admin/home">Dashboard</a></li>
+            <li><a href="/admin/user">User</a></li>
+            <li><a href="/admin/category">Category</a></li>
+            <li><a href="/admin/product">Product</a></li>
+            <li><a href="/admin/order">order</a></li>
+            <li><a href="/admin/coupoun">coupoun</a></li>
+            <li><a href="/admin/Banner">Banner</a></li>
+            <li><a href="/admin/sale">Sales</a></li>
+            <li><a href="/admin/logout">logout</a></li>
+            <!-- Add more navigation items as needed -->
+        </ul>
+    </div>
+  
+    <div class="content">
+        <form id="editProductForm" action="/admin/editproduct/<%= element._id%>" method="post" enctype="multipart/form-data">
+    
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" name="productName" value="<%=element.Productname%>">
+            <div class="error-message" id="productNameError"></div>
+
+           <label for="Category">Category:</label>
+        <select class="select" name="Category">
+            <% categories.forEach(category => { %>
+            <option value="<%= category.Category %>"><%= category.Category %></option>
+            <% }); %>
+        </select>
+    
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" value="<%=element.Stock%>">
+        <div class="error-message" id="stockError"></div> <!-- Error message for Stock field -->
+    
+        <label for="discountedPrice">Original Price:</label>
+        <input type="number" name="discountedPrice" id="discountedPrice" value="<%=element.Price%>">
+        <div class="error-message" id="discountedPriceError"></div> <!-- Error message for Original Price field -->
+    
+        <label for="offer">Offer (%):</label>
+        <input type="number" name="offer" id="offer" value="<%=element.OfferPercentage%>">
+        <div class="error-message" id="offerError"></div> <!-- Error message for Offer field -->
+    
+        <label for="rating">Rating:</label>
+        <input type="number" id="rating" name="rating" value="<%=element.Rating%>">
+        <div class="error-message" id="ratingError"></div> 
+        
+    
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4"><%=element.Description %></textarea>
+            <div class="error-message" id="descriptionError"></div>
+    
+            <label for="productImage">Product Image:</label>
+            <input type="file" id="image" name="image" accept="image/*" multiple onchange="previewImages(event)">
+            <div id="preview">
+                <% element.Image.forEach((image, index) => { %>
+                <div class="image-container">
+                    <img id="zoom-image-<%= element._id %>" class="card-img-top" src="/productImages/<%= image %>" />
+                    <div class="delete-button" onclick="deleteImage(this, '<%= image %>','<%= element._id %>')">delete</div>
+                </div>
+                <% }); %>
+            </div>
+            <p id="image-count">Image Count: 6</p>
+            <button type="submit">Edit Product</button>
+        </form>
+    </div>
+
+    <script>
+        const editProductForm = document.getElementById('editProductForm');
+        editProductForm.addEventListener('submit', validateForm)
+        console.log(editProductForm)
+
+        function previewImages(event) {
+            let previewDiv = document.getElementById('preview');
+            previewDiv.innerHTML = "";
+
+            const files = event.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const image = URL.createObjectURL(files[i]);
+                const newImage = document.createElement('img');
+                newImage.src = image;
+
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'image-container';
+                imageContainer.appendChild(newImage);
+
+                previewDiv.appendChild(imageContainer);
+            }
+
+            updateImageCount();
+        }
+
+        function deleteImage(button, imageName, productId) {
+            const imageContainer = button.parentNode;
+            const previewDiv = document.getElementById('preview');
+            previewDiv.removeChild(imageContainer);
+
+            // Send request to the server to delete the image permanently
+            fetch(`/admin/proImgEdite/${productId}`, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    imgName: imageName,
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Image deleted successfully');
+                    } else {
+                        console.error('Failed to delete image');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting image:', error);
+                });
+
+            updateImageCount();
+        }
+
+        function updateImageCount() {
+            const previewDiv = document.getElementById('preview');
+            const imageCount = previewDiv.children.length;
+            const countDisplay = document.getElementById('image-count');
+            countDisplay.innerText = `Image Count: ${imageCount}`;
+        }
+// Validation
+document.getElementById('editProductForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    let stock = document.getElementById("stock").value.trim();
+    let stockError = document.getElementById("stockError");
+    let discountedPrice = document.getElementById("discountedPrice").value.trim();
+    let discountedPriceError = document.getElementById("discountedPriceError");
+    let offer = document.getElementById("offer").value.trim();
+    let offerError = document.getElementById("offerError");
+    let rating = document.getElementById("rating").value.trim();
+    let ratingError = document.getElementById("ratingError");
+
+    // Function to show error message
+    function showError(element, message) {
+        element.textContent = message; // Display the error message
+    }
+
+    // Function to clear error message
+    function clearError(element) {
+        element.textContent = ""; // Clear the error message
+    }
+
+    // Check if stock is a negative number
+    if (stock < 0) {
+        showError(stockError, "Stock cannot be a negative number");
+        return;
+    }
+    clearError(stockError);
+
+    // Check if discounted price is a negative number
+    if (discountedPrice < 0) {
+        showError(discountedPriceError, "Original Price cannot be a negative number");
+        return;
+    }
+    clearError(discountedPriceError);
+
+    // Check if offer is a negative number
+    if (offer < 0) {
+        showError(offerError, "Offer cannot be a negative number");
+        return;
+    }
+    clearError(offerError);
+
+    // Check if rating is a negative number
+    if (rating < 0) {
+        showError(ratingError, "Rating cannot be a negative number");
+        return;
+    }
+    clearError(ratingError);
+
+    // If all inputs are valid, submit the form
+    this.submit();
+});
+
+function showError(fieldId, errorMessage) {
+    var errorElement = document.getElementById(fieldId + "Error"); // Append "Error" to fieldId to target the error message placeholder
+    errorElement.innerText = errorMessage;
+    errorElement.style.color = "red";
+}
+
+        function resetErrors() {
+            var errorElements = document.getElementsByClassName("error-message");
+            for (var i = 0; i < errorElements.length; i++) {
+                errorElements[i].innerText = "";
+            }
+        }
+// offer discount
+        // Function to calculate discounted price based on original price and offer percentage
+function calculateDiscountedPrice() {
+    const originalPrice = parseFloat(document.getElementById('discountedPrice').value);
+    const offerPercentage = parseFloat(document.getElementById('offer').value);
+    const discountedPrice = originalPrice - (originalPrice * (offerPercentage / 100));
+    return discountedPrice.toFixed(2); // Round to two decimal places
+}
+
+// Function to update the "Discounted Price" field with the calculated value
+function updateDiscountedPrice() {
+    const discountedPrice = calculateDiscountedPrice();
+    document.getElementById('price').value = discountedPrice;
+}
+
+// Update discounted price when offer percentage changes
+document.getElementById('offer').addEventListener('input', updateDiscountedPrice);
+
+// Update discounted price when original price changes
+document.getElementById('price').addEventListener('input', updateDiscountedPrice);
+
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+<!-- ...................Backend For AdminEdit............... -->
+
+const editproductpost = async (req, res) => {
+    console.log("Editproduct");
+    try {
+        const productId = req.params.id;
+        const image = req.files;
+        const products = await collectionProduct.findById(productId);
+
+        if (!products) {
+            return res.status(404).send("Product not found");
+        }
+
+        if(req.body.stock < 0)
+            return res.redirect('/admin/product')
+
+            if(req.body.rating < 0)
+            return res.redirect('/admin/product')
+
+      
+        products.Productname = req.body.productName;
+        products.Category = req.body.Category;
+        products.Stock = req.body.stock;
+        products.Rating = req.body.rating;
+        products.Price = req.body.discountedPrice;
+        products.OfferPercentage = req.body.offer;
+        products.OriginalPrice = Math.ceil(req.body.discountedPrice - ((req.body.discountedPrice / 100) * req.body.offer));
+        products.Description = req.body.description;
+
+        if (req.files && req.files.length > 0) {
+            products.Image = products.Image.concat(image.map(file => file.filename));
+        }
+
+        await products.save();
+        res.redirect('/admin/product');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error.message);
+    }
+};

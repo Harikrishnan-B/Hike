@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Order</title>
+  <style>
+    /* CSS for styling */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f2f2f2;
+    }
+    .container {
+      max-width: 600px;
+      padding: 20px;
+      text-align: center;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .container h1 {
+      margin-top: 0;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 10px;
+      transition: background-color 0.3s ease-in-out;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .tick {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      background: url('data:image/svg+xml;utf8,<svg fill="green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>');
+      background-size: cover;
+      opacity: 0;
+      animation: fadeInTick 0.5s ease-in-out 0.5s forwards;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeInTick {
+      from {
+        opacity: 0;
+        transform: scale(0);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1> Order Placed</h1>
+    <!-- Order details can be displayed here -->
+    <p>Your order has been confirmed!</p>
+    <!-- Tick animation -->
+    <div class="tick"></div>
+    <!-- Button to view order history -->
+    <a href="/orderPage" class="btn">Order History</a>
+    <!-- Close button to redirect to home -->
+    <button onclick="redirectToHome()" class="btn">Close</button>
+  </div>
+
+  <script>
+    // JavaScript function to redirect to home page
+    function redirectToHome() {
+      window.location.href = "/home";
+    }
+  </script>
+</body>
+</html>
+
+
+
+
